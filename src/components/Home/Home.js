@@ -4,17 +4,17 @@ import React from 'react';
 import NavBar from '../common/NavBar';
 import TopBar from '../common/TopBar';
 
-import styles from './Home.css';
+import './Home.css';
 
 export default function Home () {
 	return (
-		<div>
+		<div className="home">
 			<TopBar />
 			<NavBar />
 
-			<div className={styles['wrapper']}>
-				<div className={styles['container']}>
-				<div className={styles['content']}>
+			<div className='wrapper'>
+				<div className='container'>
+				<div className='content'>
 					Bharat
 				</div>
 				</div>

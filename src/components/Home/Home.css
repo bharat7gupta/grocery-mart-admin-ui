@@ -1,8 +1,16 @@
+.home {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
 .wrapper {
     display: flex;
     flex: 1 1 auto;
     overflow: hidden;
-    padding-top: 64;
+    padding-top: 64px;
+    padding-left: 256px;
 }
 
 .container {
