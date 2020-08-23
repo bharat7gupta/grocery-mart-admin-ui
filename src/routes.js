@@ -10,8 +10,15 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import Home from 'src/components/Home/Home';
 
 const routes = [
+  {
+    path: 'home',
+    children: [
+      { path: '/', element: <Home /> }
+    ]
+  },
   {
     path: 'app',
     element: <DashboardLayout />,

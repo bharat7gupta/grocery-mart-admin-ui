@@ -1,0 +1,18 @@
+.wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding-top: 64;
+}
+
+.container {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.content {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: auto;
+}
