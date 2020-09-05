@@ -25,22 +25,17 @@ const items = [
   {
     href: '/home',
     icon: HomeIcon,
-    title: 'Home'
-  },
-  {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
-  },
-  {
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
+    title: 'Home Page Builder'
   },
   {
     href: '/app/products',
     icon: ShoppingBagIcon,
     title: 'Products'
+  },
+  {
+    href: '/app/customers',
+    icon: UsersIcon,
+    title: 'Customers'
   },
   {
     href: '/app/account',
@@ -51,21 +46,6 @@ const items = [
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
   }
 ];
 

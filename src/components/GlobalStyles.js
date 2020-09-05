@@ -24,6 +24,18 @@ const useStyles = makeStyles(() => createStyles({
     '#root': {
       height: '100%',
       width: '100%'
+    },
+    '.MuiAlert-standardSuccess': {
+      background: '#4caf50 !important'
+    },
+    '.MuiAlert-standardError': {
+      background: '#f44336 !important'
+    },
+    '.MuiAlert-icon': {
+      color: 'white !important'
+    },
+    '.MuiAlert-message': {
+      color: 'white !important'
     }
   }
 }));

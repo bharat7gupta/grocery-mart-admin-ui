@@ -1,0 +1,91 @@
+export const homePageSlots = {
+	topBanner1: {
+		key: 'top-banner-1',
+		config: {
+			styles: {
+				width: '100%',
+				height: '360px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	topBanner2: {
+		key: 'top-banner-2',
+		config: {
+			styles: {
+				width: '100%',
+				height: '360px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	topBanner3: {
+		key: 'top-banner-3',
+		config: {
+			styles: {
+				width: '100%',
+				height: '360px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	puzzleLeft: {
+		key: 'puzzle-left',
+		config: {
+			styles: {
+				width: '100%',
+				height: '380px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	puzzleRightTop: {
+		key: 'puzzle-right-top',
+		config: {
+			styles: {
+				width: '100%',
+				height: '180px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	puzzleRightBottom: {
+		key: 'puzzle-right-bottom',
+		config: {
+			styles: {
+				width: '100%',
+				height: '180px',
+				backgroundSize: 'cover'
+			}
+		}
+	},
+
+	featureProducts: {
+		key: 'feature-products',
+		config: {
+			styles: {
+				width: '360px',
+				height: '750px',
+				backgroundSize: 'cover',
+				marginRight: '20px'
+			}
+		}
+	},
+
+	offerProducts: {
+		key: 'offer-products',
+		config: {
+			styles: {
+				width: '360px',
+				height: '750px',
+				backgroundSize: 'cover',
+				marginLeft: '20px'
+			}
+		}
+	},
+};

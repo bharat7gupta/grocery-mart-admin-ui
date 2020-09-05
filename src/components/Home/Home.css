@@ -24,30 +24,69 @@
     height: 100%;
     overflow: auto;
     padding: 10px;
+    padding-bottom: 400px;
 }
 
-.box {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    background-color: rgba(200, 200, 0, 0.2);
+.center-align {
+    margin: 12px 0;
+    display: flex;
+    justify-content: center;
 }
 
-.box:hover .upload-button {
-    display: inline;
-}
-
-.upload-button {
-    display: none;
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
-    width: 40px;
-    height: 40px;
-    line-height: 54px;
-    background: #50c22b;
-    border-radius: 4px;
-    color: white;
+.dot {
+    width: 8px;
+    height: 8px;
+    padding: 4px;
+    margin: 4px 16px;
+    background-color: #aaaaaa;
+    border-radius: 50%;
     cursor: pointer;
+}
+
+.dot-selected {
+    background-color: #34312d;
+}
+
+.puzzle-section {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+}
+
+.puzzle-left-section {
+    width: 66%;
+    margin-right: 30px;
+}
+
+.puzzle-right-section {
+    width: 33%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+h1 {
+    margin: 40px;
     text-align: center;
+}
+
+.feature-products-container,
+.offer-products-container {
+    display: flex;
+}
+
+.center-align-hv {
+    flex: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.filler {
+    flex: 1;
+    position: relative;
+    height: 750px;
+    background-color: #ddd;
 }
