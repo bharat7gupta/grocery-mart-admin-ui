@@ -43,7 +43,7 @@ const ProductList = () => {
               <Grid
                 item
                 key={product.id}
-                lg={4}
+                lg={3}
                 md={6}
                 xs={12}
               >
@@ -54,17 +54,6 @@ const ProductList = () => {
               </Grid>
             ))}
           </Grid>
-        </Box>
-        <Box
-          mt={3}
-          display="flex"
-          justifyContent="center"
-        >
-          <Pagination
-            color="primary"
-            count={3}
-            size="small"
-          />
         </Box>
       </Container>
     </Page>

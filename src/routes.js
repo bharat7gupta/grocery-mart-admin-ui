@@ -13,16 +13,13 @@ import SettingsView from 'src/views/settings/SettingsView';
 import Home from 'src/components/Home/Home';
 
 const routes = [
-  {
-    path: 'home',
-    children: [
-      { path: '/', element: <Home /> }
-    ]
-  },
+  
   {
     path: 'app',
     element: <DashboardLayout />,
     children: [
+      { path: 'home', element: <Home /> },
+      { path: 'products', element: <ProductListView /> },
       { path: 'account', element: <AccountView /> },
       { path: 'customers', element: <CustomerListView /> },
       { path: 'dashboard', element: <DashboardView /> },

@@ -21,6 +21,13 @@ const useStyles = makeStyles(() => ({
   avatar: {
     width: 60,
     height: 60
+  },
+  title: {
+    color: 'white',
+    fontSize: '24px',
+    margin: '6px 0 0 12px',
+    display: 'inline-block',
+    fontWeight: 500
   }
 }));
 
@@ -39,8 +46,9 @@ const TopBar = ({
       {...rest}
     >
       <Toolbar>
-        <RouterLink to="/">
+        <RouterLink to="/" style={{display: 'flex'}}>
           <Logo />
+          <div className={classes.title}>e-Vender Admin Panel</div>
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>

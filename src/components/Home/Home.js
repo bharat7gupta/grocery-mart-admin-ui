@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Modal, TextField, Button } from '@material-ui/core';
 
-import NavBar from '../common/NavBar';
-import TopBar from '../common/TopBar';
 import FileUpload from '../common/FileUpload/FileUpload';
 import { homePageSlots } from '../common/config';
 import Toast from '../common/Toast/Toast';
@@ -231,64 +229,57 @@ export default function Home() {
 	};
 
 	return (
-		<div className="home">
-			<TopBar />
-			<NavBar />
+		<div className="container">
+			<div className="content">
+				{getFileUploadComponent(homePageSlots[`topBanner${bannerIndex}`])}
 
-			<div className="wrapper">
-				<div className="container">
-					<div className="content">
-						{getFileUploadComponent(homePageSlots[`topBanner${bannerIndex}`])}
+				{getThreeDots()}
 
-						{getThreeDots()}
+				<div className="puzzle-section">
+					<div className="puzzle-left-section">
+						{getFileUploadComponent(homePageSlots.puzzleLeft)}
+					</div>
+					<div className="puzzle-right-section">
+						{getFileUploadComponent(homePageSlots.puzzleRightTop)}
+						{getFileUploadComponent(homePageSlots.puzzleRightBottom)}
+					</div>
+				</div>
 
-						<div className="puzzle-section">
-							<div className="puzzle-left-section">
-								{getFileUploadComponent(homePageSlots.puzzleLeft)}
-							</div>
-							<div className="puzzle-right-section">
-								{getFileUploadComponent(homePageSlots.puzzleRightTop)}
-								{getFileUploadComponent(homePageSlots.puzzleRightBottom)}
-							</div>
-						</div>
+				<h1>Feature Products</h1>
+				<div className="feature-products-container">
+					{getFileUploadComponent(homePageSlots.featureProducts)}
 
-						<h1>Feature Products</h1>
-						<div className="feature-products-container">
-							{getFileUploadComponent(homePageSlots.featureProducts)}
-
-							<div className="filler">
-								<div className="center-align-hv">
-									Show Products here
-								</div>
-							</div>
-						</div>
-
-						<h1>Offer Products</h1>
-						<div className="offer-products-container">
-							<div className="filler">
-								<div className="center-align-hv">
-									Show Products here
-								</div>
-							</div>
-
-							{getFileUploadComponent(homePageSlots.offerProducts)}
+					<div className="filler">
+						<div className="center-align-hv">
+							Show Products here
 						</div>
 					</div>
 				</div>
 
-				<Toast {...toastInfo} />
+				<h1>Offer Products</h1>
+				<div className="offer-products-container">
+					<div className="filler">
+						<div className="center-align-hv">
+							Show Products here
+						</div>
+					</div>
 
-				<Modal
-					open={showModal}
-					onClose={() => {}}
-					onBackdropClick={() => setShowModal(false)}
-					onEscapeKeyDown={() => setShowModal(false)}
-					disableEnforceFocus
-					disableAutoFocus
-				>
-					{getModalContent()}
-				</Modal>
+					{getFileUploadComponent(homePageSlots.offerProducts)}
+				</div>
 			</div>
+
+			<Toast {...toastInfo} />
+
+			<Modal
+				open={showModal}
+				onClose={() => {}}
+				onBackdropClick={() => setShowModal(false)}
+				onEscapeKeyDown={() => setShowModal(false)}
+				disableEnforceFocus
+				disableAutoFocus
+			>
+				{getModalContent()}
+			</Modal>
 		</div>
 	);
 }
