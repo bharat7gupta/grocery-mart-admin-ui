@@ -89,3 +89,14 @@ export const homePageSlots = {
 		}
 	},
 };
+
+export const homePageSlotKeys = [
+	'top-banner-1',
+	'top-banner-2',
+	'top-banner-3',
+	'puzzle-left',
+	'puzzle-right-top',
+	'puzzle-right-bottom',
+	'feature-products',
+	'offer-products'
+];

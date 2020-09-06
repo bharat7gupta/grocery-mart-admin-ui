@@ -90,3 +90,34 @@ h1 {
     height: 750px;
     background-color: #ddd;
 }
+
+.modal-content {
+    position: absolute;
+    width: 400px;
+    height: 348px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 4px;
+}
+
+.modal-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-body {
+    padding: 20px 30px;
+}
+
+.modal-footer {
+    text-align: right;
+    border-top: 1px solid #ddd;
+    padding: 14px 30px;
+}
+
+.input-field {
+    display: block;
+    padding: 16px 0;
+}
