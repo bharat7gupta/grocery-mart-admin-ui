@@ -12,7 +12,7 @@ import './Home.css';
 
 let currentFileUploadKey = "";
 const TOAST_AUTO_HIDE_DURATION = 6000;
-const URL_REGEX = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+const URL_REGEX = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 const API_ROOT = "http://localhost:1337";
 
 export default function Home() {
