@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Toolbar = ({ className, onAddProduct, onSearch, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -38,6 +38,7 @@ const Toolbar = ({ className, ...rest }) => {
         <Button
           color="primary"
           variant="contained"
+          onClick={onAddProduct}
         >
           Add product
         </Button>
@@ -62,6 +63,7 @@ const Toolbar = ({ className, ...rest }) => {
                 }}
                 placeholder="Search product"
                 variant="outlined"
+                onChange={onSearch}
               />
             </Box>
           </CardContent>

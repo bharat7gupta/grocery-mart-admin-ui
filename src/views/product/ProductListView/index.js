@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import {
   Box,
   Container,
   Grid,
   makeStyles
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Modal } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Toolbar from './Toolbar';
 import ProductCard from './ProductCard';
+import Toolbar from './Toolbar';
+import ProductAddEdit from '../ProductAddEdit';
+import productReducer, { productInitialState, ProductActions } from '../../../reducers/productReducer';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +28,34 @@ const useStyles = makeStyles((theme) => ({
 const ProductList = () => {
   const classes = useStyles();
   const [products] = useState(data);
+  const [ showModal, setShowModal ] = useState(false);
+  const [ editing, setEditing ] = useState(false);
+  const [ productState, dispatch ] = useReducer(productReducer, productInitialState);
+
+  const handleAddProductClick = () => {
+    dispatch({ type: ProductActions.RESET });
+    setEditing(false);
+    setShowModal(true);
+  };
+
+  const searchProduct = () => {
+
+  };
+
+  const handleProductDetailChanged = (changes) => {
+    dispatch({
+      type: ProductActions.PRODUCT_DETAIL_CHANGE,
+      data: changes
+    });
+  };
+
+  const handleAddBuyingOption = () => {
+    dispatch({ type: ProductActions.ADD_BUYING_OPTION });
+  };
+
+  const handleRemoveBuyingOption = (index) => {
+    dispatch({ type: ProductActions.REMOVE_BUYING_OPTION, index });
+  };
 
   return (
     <Page
@@ -33,7 +63,7 @@ const ProductList = () => {
       title="Products"
     >
       <Container maxWidth={false}>
-        <Toolbar />
+        <Toolbar onAddProduct={handleAddProductClick} onSearch={searchProduct} />
         <Box mt={3}>
           <Grid
             container
@@ -55,6 +85,22 @@ const ProductList = () => {
             ))}
           </Grid>
         </Box>
+
+        <Modal
+          open={showModal}
+          onClose={() => {}}
+          disableEnforceFocus
+          disableAutoFocus
+        >
+          <ProductAddEdit
+            isEditing={editing}
+            product={productState}
+            onProductDetailChanged={handleProductDetailChanged}
+            onAddBuyingOption={handleAddBuyingOption}
+            onRemoveBuyingOption={handleRemoveBuyingOption}
+            onClose={() => setShowModal(false)}
+          />
+        </Modal>
       </Container>
     </Page>
   );
