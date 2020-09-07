@@ -9,7 +9,6 @@ import homePageConfigReducer, { homePageConfigInitialState, HomePageConfigAction
 import './Home.css';
 
 let currentFileUploadKey = "";
-const TOAST_AUTO_HIDE_DURATION = 6000;
 const URL_REGEX = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 const API_ROOT = "http://localhost:1337";
 
@@ -56,31 +55,19 @@ export default function Home() {
 			data: uploadInfo
 		});
 
-		showSuccessToast("Image uploaded successfully");
+		showToast("success", "Image uploaded successfully");
 	};
 
 	const cloudinaryErrorEventCallback = (message) => {
-		showErrorToast(message || "Something went wrong. Please try again!");
+		showToast("error", message || "Something went wrong. Please try again!");
 	};
 
-	const showSuccessToast = (message) => {
+	const showToast = (severity, message) => {
 		setToastInfo({
 			showToast: true,
-			severity: "success",
+			severity,
 			message
 		});
-
-		setTimeout(() => setToastInfo({ showToast: false }), TOAST_AUTO_HIDE_DURATION);
-	};
-
-	const showErrorToast = (message) => {
-		setToastInfo({
-			showToast: true,
-			severity: "error",
-			message
-		});
-
-		setTimeout(() => setToastInfo({ showToast: false }), TOAST_AUTO_HIDE_DURATION);
 	};
 
 	const handleUploadClick = key => {
@@ -145,7 +132,7 @@ export default function Home() {
 
 	const handleConfirmImage = () => {
 		if (!URL_REGEX.test(imageInfoModalData.navigatingUrl)) {
-			showErrorToast("Please enter a valid URL");
+			showToast("error", "Please enter a valid URL");
 			return;
 		}
 
@@ -268,7 +255,7 @@ export default function Home() {
 				</div>
 			</div>
 
-			<Toast {...toastInfo} />
+			<Toast {...toastInfo} onClose={() => setToastInfo({ showToast: false })} />
 
 			<Modal
 				open={showModal}
