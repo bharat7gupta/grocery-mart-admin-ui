@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, TextField, Button } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { UploadCloud } from 'react-feather';
 import BuyingOption from './BuyingOption';
 import * as CloudinaryUtils from '../../utils/cloudinaryUtils';
+import Toast from '../../components/common/Toast/Toast';
 
 const useStyles = makeStyles(() => ({
 	content: {
@@ -59,6 +60,20 @@ const units = [
 export default function ProductAddEdit (props) {
 	const classes = useStyles();
 
+	const [ toastInfo, setToastInfo ] = useState({
+		showToast: false,
+		severity: "",
+		message: ""
+	});
+
+	const showToast = (severity, message) => {
+		setToastInfo({
+			showToast: true,
+			severity,
+			message
+		});
+	};
+
 	useEffect(() => {
 		// initialize cloudinary upload widget
 		CloudinaryUtils.createUploadWidget(
@@ -72,13 +87,13 @@ export default function ProductAddEdit (props) {
 			onProductDetailChanged({
 				productImage: uploadInfo.secure_url
 			});
-		}
 
-		// showSuccessToast("Image uploaded successfully");
+			showToast("success", "Image uploaded successfully");
+		}
 	};
 
 	const cloudinaryErrorEventCallback = (message) => {
-		// showErrorToast(message || "Something went wrong. Please try again!");
+		showToast("error", message || "Something went wrong. Please try again!");
 	};
 
 	const { product, onProductDetailChanged } = props;
@@ -203,6 +218,8 @@ export default function ProductAddEdit (props) {
 					{props.isEditing ? "Save Product" : "Add Product"}
 				</Button>
 			</div>
+
+			<Toast {...toastInfo} onClose={() => setToastInfo({ showToast: false })} />
 		</div>
 	);
 }
