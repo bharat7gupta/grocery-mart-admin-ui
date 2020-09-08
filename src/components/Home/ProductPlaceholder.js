@@ -38,7 +38,7 @@ export default function ProductPlaceholder(props) {
 				onClick={props.onAddProduct}
 				className={classes.addProduct}
 			>
-				Add Product Here
+				Add Product
 			</Button>
 		</div>
 	)

@@ -117,3 +117,35 @@ h1 {
     width: 100%;
     overflow-x: auto;
 }
+
+.product-card-container {
+    position: relative;
+    margin: 0 12px;
+}
+
+.product-card-container:first-child {
+    margin-left: 0;
+}
+
+.product-card-container:last-child {
+    margin-right: 0;
+}
+
+.product-card {
+    min-width: 330px;
+    height: 363px;
+}
+
+.product-card-container:hover .product-overlay {
+    display: block;
+}
+
+.product-overlay {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    background-color: rgba(0,0,0,0.3);
+}

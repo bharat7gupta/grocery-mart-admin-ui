@@ -55,27 +55,29 @@ const ProductCard = ({ className, product, onEditProduct, ...rest }) => {
           gutterBottom
           variant="h4"
         >
-          {product.productName}
+          {product.productName} {!onEditProduct && `(${product.productId})`}
         </Typography>
 
         <BuyingOptionView values={product.buyingOptions} />
       </CardContent>
       <Box flexGrow={1} />
       <Divider />
-      <Box p={2}>
-        <Grid
-          container
-          justify="center"
-          spacing={2}
-        >
-          <Button
-            color="primary"
-            onClick={onEditProduct}
+      {onEditProduct && (
+        <Box p={2}>
+          <Grid
+            container
+            justify="center"
+            spacing={2}
           >
-            Edit product
-          </Button>
-        </Grid>
-      </Box>
+            <Button
+              color="primary"
+              onClick={onEditProduct}
+            >
+              Edit product
+            </Button>
+          </Grid>
+        </Box>
+      )}
     </Card>
   );
 };

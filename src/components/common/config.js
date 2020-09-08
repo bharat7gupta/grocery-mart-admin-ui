@@ -65,8 +65,8 @@ export const homePageSlots = {
 		}
 	},
 
-	featureProducts: {
-		key: 'feature-products',
+	featureBanner: {
+		key: 'feature-banner',
 		config: {
 			styles: {
 				width: '360px',
@@ -77,8 +77,8 @@ export const homePageSlots = {
 		}
 	},
 
-	offerProducts: {
-		key: 'offer-products',
+	offerBanner: {
+		key: 'offer-banner',
 		config: {
 			styles: {
 				width: '360px',
