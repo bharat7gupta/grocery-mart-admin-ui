@@ -12,6 +12,7 @@ import Toolbar from './Toolbar';
 import ProductAddEdit from '../ProductAddEdit';
 import productReducer, { productInitialState, ProductActions } from '../../../reducers/productReducer';
 import data from './data';
+import Toast from '../../../components/common/Toast/Toast';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,20 @@ const ProductList = () => {
     setShowModal(true);
   };
 
+  const [ toastInfo, setToastInfo ] = useState({
+		showToast: false,
+		severity: "",
+		message: ""
+	});
+
+  const showToast = (severity, message) => {
+		setToastInfo({
+			showToast: true,
+			severity,
+			message
+		});
+  };
+
   const searchProduct = () => {
 
   };
@@ -56,6 +71,19 @@ const ProductList = () => {
   const handleRemoveBuyingOption = (index) => {
     dispatch({ type: ProductActions.REMOVE_BUYING_OPTION, index });
   };
+
+  const handleSubmit = () => {
+    fetch(`http://localhost:1337/api/v1/product/save`, {
+      method: "POST",
+      body: JSON.stringify(productState)
+    })
+    .then(response => {
+      response.json().then(data => {
+        showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
+        setShowModal(false);
+      });
+    });
+  }
 
   return (
     <Page
@@ -98,10 +126,13 @@ const ProductList = () => {
             onProductDetailChanged={handleProductDetailChanged}
             onAddBuyingOption={handleAddBuyingOption}
             onRemoveBuyingOption={handleRemoveBuyingOption}
+            onSubmit={handleSubmit}
             onClose={() => setShowModal(false)}
           />
         </Modal>
       </Container>
+
+      <Toast {...toastInfo} onClose={() => setToastInfo({ showToast: false })} />
     </Page>
   );
 };

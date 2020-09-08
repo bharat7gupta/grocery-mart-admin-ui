@@ -205,7 +205,11 @@ export default function ProductAddEdit (props) {
 
 		// if there are no validation messages, initiate api request
 		if (Object.keys(currentValidations).length === 1 && noValidationError) {
-			console.log(product);
+			try {
+				props.onSubmit();
+			} catch(e) {
+				showToast("error", "Something went wrong. Please try again!");
+			}
 		}
 		else {
 			setSubmitButtonDisabled(false);
