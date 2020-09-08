@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 }));
 export default function BuyingOption(props) {
 	const classes = useStyles();
-	const { value, onBuyingOptionChanged, onRemoveBuyingOption, hideRemoveOptionButton } = props;
+	const { value, onBuyingOptionChanged, onRemoveBuyingOption, hideRemoveOptionButton, validation } = props;
 
 	const handleWholesaleChange = (event) => {
 		onBuyingOptionChanged({ ...value, isWholesale: event.target.checked });
@@ -110,6 +110,8 @@ export default function BuyingOption(props) {
 				className={classes.miniInput}
 				value={value.unit}
 				onChange={handleUnitChange}
+				error={!!validation.unit}
+				helperText={validation.unit}
 			/>
 
 			<TextField
@@ -120,6 +122,8 @@ export default function BuyingOption(props) {
 				className={classes.miniInput}
 				value={value.mrp}
 				onChange={handleMRPChange}
+				error={!!validation.mrp}
+				helperText={validation.mrp}
 			/>
 
 			<TextField
@@ -130,6 +134,8 @@ export default function BuyingOption(props) {
 				className={classes.miniInput}
 				value={value.offer}
 				onChange={handleOfferChange}
+				error={!!validation.offer}
+				helperText={validation.offer}
 			/>
 
 			<TextField
@@ -140,6 +146,8 @@ export default function BuyingOption(props) {
 				className={classes.miniInput}
 				value={value.price}
 				onChange={handlePriceChange}
+				error={!!validation.price}
+				helperText={validation.price}
 			/>
 
 			<XCircle

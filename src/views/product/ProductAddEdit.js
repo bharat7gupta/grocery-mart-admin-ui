@@ -59,6 +59,10 @@ const preferences = [
 
 export default function ProductAddEdit (props) {
 	const classes = useStyles();
+	const { product, onProductDetailChanged } = props;
+	const [ submitButtonDisabled, setSubmitButtonDisabled ] = useState(false);
+	const [didMount, setDidMount] = useState(false)
+	const [ validations, setValidations ] = useState({});
 
 	const [ toastInfo, setToastInfo ] = useState({
 		showToast: false,
@@ -80,7 +84,15 @@ export default function ProductAddEdit (props) {
 			cloudinarySuccessEventCallback,
 			cloudinaryErrorEventCallback
 		);
-	});
+
+		setDidMount(true);
+	}, []);
+
+	useEffect(() => {
+		if (didMount) {
+			setValidations(getValidationMessages());
+		}
+	}, [ product ]);
 
 	const cloudinarySuccessEventCallback = uploadInfo => {
 		if (uploadInfo) {
@@ -95,8 +107,6 @@ export default function ProductAddEdit (props) {
 	const cloudinaryErrorEventCallback = (message) => {
 		showToast("error", message || "Something went wrong. Please try again!");
 	};
-
-	const { product, onProductDetailChanged } = props;
 
 	const handleProductNameChange = (e) => {
 		onProductDetailChanged({ productName: e.target.value });
@@ -134,8 +144,71 @@ export default function ProductAddEdit (props) {
 		onProductDetailChanged({ disclaimer: e.target.value });
 	};
 
+	const getValidationMessages = (onSubmit) => {
+		let validations = {};
+
+		// product name validation
+		if (!product.productName || product.productName.trim() === "") {
+			validations.productName = "Enter valid product name";
+		}
+
+		// product name validation
+		if (onSubmit && (!product.productImage || product.productImage.trim() === "")) {
+			validations.productImage = "error"
+		}
+
+		// product buying options validation
+		if (onSubmit && product.buyingOptions) {
+			validations.buyingOptions = [];
+
+			for (let i=0; i<product.buyingOptions.length; i++) {
+				const currentBOValidation = {};
+				const currentBuyingOption = product.buyingOptions[i];
+
+				if (!currentBuyingOption.unit || currentBuyingOption.unit.trim() === "") {
+					currentBOValidation.unit = "Invalid";
+				}
+
+				if (!currentBuyingOption.mrp || isNaN(currentBuyingOption.mrp)) {
+					currentBOValidation.mrp = "Invalid";
+				}
+
+				if (currentBuyingOption.offer && isNaN(currentBuyingOption.offer)) {
+					currentBOValidation.offer = "Invalid";
+				}
+
+				if (!currentBuyingOption.price || isNaN(currentBuyingOption.price)) {
+					currentBOValidation.price = "Invalid";
+				}
+
+				validations.buyingOptions.push(currentBOValidation);
+			}
+		}
+
+		return validations;
+	}
+
 	const handleProductChanges = () => {
-		console.log(product);
+		setSubmitButtonDisabled(true);
+		const currentValidations = getValidationMessages(true);
+		setValidations(currentValidations);
+
+		// check if there are validation messages
+		let noValidationError = false;
+		for (let i=0; i<currentValidations.buyingOptions.length; i++) {
+			if (Object.keys(currentValidations.buyingOptions[i]).length > 0) {
+				noValidationError = true;
+				break;
+			}
+		}
+
+		// if there are no validation messages, initiate api request
+		if (Object.keys(currentValidations).length === 1 && noValidationError) {
+			console.log(product);
+		}
+		else {
+			setSubmitButtonDisabled(false);
+		}
 	};
 
 	let preferenceOptions = preferences || [];
@@ -161,6 +234,8 @@ export default function ProductAddEdit (props) {
 						label="Product Name *"
 						value={product.productName}
 						onChange={handleProductNameChange}
+						error={!!validations.productName}
+						helperText={validations.productName}
 					/>
 				</div>
 
@@ -171,6 +246,7 @@ export default function ProductAddEdit (props) {
 						size="small"
 						variant="outlined"
 						label="Product Image *"
+						error={!!validations.productImage}
 						helperText="Click upload button to upload product image"
 						InputProps={{endAdornment: (
 							<UploadCloud
@@ -185,6 +261,7 @@ export default function ProductAddEdit (props) {
 					<BuyingOption
 						hideRemoveOptionButton={props.product.buyingOptions.length === 1}
 						value={buyingOption}
+						validation={(validations.buyingOptions && validations.buyingOptions[index]) || {}}
 						onBuyingOptionChanged={(buyingOption) => handleBuyingOptionChanged(index, buyingOption)}
 						onRemoveBuyingOption={() => props.onRemoveBuyingOption(index)}
 					/>
@@ -273,7 +350,7 @@ export default function ProductAddEdit (props) {
 				<Button size="large" variant="contained" style={{marginRight: '20px'}} onClick={props.onClose}>
 					Cancel
 				</Button>
-				<Button size="large" variant="contained" color="primary" onClick={handleProductChanges}>
+				<Button size="large" variant="contained" color="primary" onClick={handleProductChanges} disabled={submitButtonDisabled}>
 					{props.isEditing ? "Save Product" : "Add Product"}
 				</Button>
 			</div>
