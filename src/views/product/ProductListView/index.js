@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -11,7 +11,6 @@ import ProductCard from './ProductCard';
 import Toolbar from './Toolbar';
 import ProductAddEdit from '../ProductAddEdit';
 import productReducer, { productInitialState, ProductActions } from '../../../reducers/productReducer';
-import data from './data';
 import Toast from '../../../components/common/Toast/Toast';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,10 +27,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductList = () => {
   const classes = useStyles();
-  const [products] = useState(data);
+  const [ products, setProducts ] = useState([]);
   const [ showModal, setShowModal ] = useState(false);
   const [ editing, setEditing ] = useState(false);
   const [ productState, dispatch ] = useReducer(productReducer, productInitialState);
+
+  useEffect(() => {
+    // load products
+    fetchAllProducts();
+  }, []);
+
+  const fetchAllProducts = () => {
+    fetch(`http://localhost:1337/api/v1/product/get`)
+      .then(response => response.json().then(data => {
+        const products = data.data;
+        setProducts(products);
+      }));
+  }
 
   const handleAddProductClick = () => {
     dispatch({ type: ProductActions.RESET });
@@ -79,10 +91,27 @@ const ProductList = () => {
     })
     .then(response => {
       response.json().then(data => {
-        showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
+        if (editing) {
+          showToast("success", `Product Saved Successfully!`);
+        }
+        else {
+          showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
+        }
+
         setShowModal(false);
+        fetchAllProducts();
       });
     });
+  }
+
+  const handleEditProduct = product => {
+    dispatch({
+      type: ProductActions.EDIT_PRODUCT,
+      data: product
+    });
+
+    setShowModal(true);
+    setEditing(true);
   }
 
   return (
@@ -108,6 +137,7 @@ const ProductList = () => {
                 <ProductCard
                   className={classes.productCard}
                   product={product}
+                  onEditProduct={() => handleEditProduct(product)}
                 />
               </Grid>
             ))}

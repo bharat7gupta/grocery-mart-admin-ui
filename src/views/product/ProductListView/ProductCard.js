@@ -9,10 +9,10 @@ import {
   Divider,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
+  Button
 } from '@material-ui/core';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import BuyingOptionView from './BuyingOptionView';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProductCard = ({ className, product, ...rest }) => {
+const ProductCard = ({ className, product, onEditProduct, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -44,7 +44,8 @@ const ProductCard = ({ className, product, ...rest }) => {
         >
           <Avatar
             alt="Product"
-            src={product.media}
+            src={product.productImage}
+            style={{ width: '256px', height: '256px' }}
             variant="square"
           />
         </Box>
@@ -54,58 +55,25 @@ const ProductCard = ({ className, product, ...rest }) => {
           gutterBottom
           variant="h4"
         >
-          {product.title}
+          {product.productName}
         </Typography>
-        <Typography
-          align="center"
-          color="textPrimary"
-          variant="body1"
-        >
-          {product.description}
-        </Typography>
+
+        <BuyingOptionView values={product.buyingOptions} />
       </CardContent>
       <Box flexGrow={1} />
       <Divider />
       <Box p={2}>
         <Grid
           container
-          justify="space-between"
+          justify="center"
           spacing={2}
         >
-          <Grid
-            className={classes.statsItem}
-            item
+          <Button
+            color="primary"
+            onClick={onEditProduct}
           >
-            <AccessTimeIcon
-              className={classes.statsIcon}
-              color="action"
-            />
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"
-            >
-              Updated 2hr ago
-            </Typography>
-          </Grid>
-          <Grid
-            className={classes.statsItem}
-            item
-          >
-            <GetAppIcon
-              className={classes.statsIcon}
-              color="action"
-            />
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"
-            >
-              {product.totalDownloads}
-              {' '}
-              Downloads
-            </Typography>
-          </Grid>
+            Edit product
+          </Button>
         </Grid>
       </Box>
     </Card>

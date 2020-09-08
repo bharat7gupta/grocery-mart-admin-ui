@@ -54,7 +54,7 @@ const useStyles = makeStyles(() => ({
 
 const preferences = [
 	'Small cut chicken',
-	'Medium cut pieces',
+	'Medium cut chicken',
 	'Large cut chicken'
 ];
 

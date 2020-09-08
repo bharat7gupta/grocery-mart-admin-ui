@@ -3,7 +3,8 @@ export const ProductActions = {
 	RESET: 'RESET',
 	PRODUCT_DETAIL_CHANGE: 'PRODUCT_DETAIL_CHANGE',
 	ADD_BUYING_OPTION: 'ADD_BUYING_OPTION',
-	REMOVE_BUYING_OPTION: 'REMOVE_BUYING_OPTION'
+	REMOVE_BUYING_OPTION: 'REMOVE_BUYING_OPTION',
+	EDIT_PRODUCT: 'EDIT_PRODUCT'
 }
 
 const buyingOptionInitialState = {
@@ -57,6 +58,12 @@ export default function productReducer (state, action) {
 				...state,
 				...action.data
 			}
+		}
+
+		case ProductActions.EDIT_PRODUCT: {
+			return {
+				...action.data
+			};
 		}
 	}
 }
