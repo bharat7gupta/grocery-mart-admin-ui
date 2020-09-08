@@ -71,9 +71,14 @@ h1 {
 
 .filler {
     flex: 1;
+    display: block;
     position: relative;
     height: 750px;
-    background-color: #ddd;
+}
+
+.filler-row {
+    display: flex;
+    margin-bottom: 24px;
 }
 
 .modal-content {
@@ -105,4 +110,10 @@ h1 {
 .input-field {
     display: block;
     padding: 16px 0;
+}
+
+.most-popular {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
 }

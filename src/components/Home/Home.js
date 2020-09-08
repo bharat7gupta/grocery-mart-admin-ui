@@ -6,6 +6,7 @@ import { homePageSlots } from '../common/config';
 import Toast from '../common/Toast/Toast';
 import * as CloudinaryUtils from '../../utils/cloudinaryUtils';
 import homePageConfigReducer, { homePageConfigInitialState, HomePageConfigActions } from '../../reducers/homePageConfigReducer';
+import ProductPlaceholder from './ProductPlaceholder';
 import './Home.css';
 
 let currentFileUploadKey = "";
@@ -237,17 +238,47 @@ export default function Home() {
 					{getFileUploadComponent(homePageSlots.featureProducts)}
 
 					<div className="filler">
-						<div className="center-align-hv">
-							Show Products here
+						<div className="filler-row">
+							<ProductPlaceholder />
+							<ProductPlaceholder />
+							<ProductPlaceholder />
+						</div>
+
+						<div className="filler-row">
+							<ProductPlaceholder />
+							<ProductPlaceholder />
+							<ProductPlaceholder />	
 						</div>
 					</div>
+				</div>
+
+				<h1>Most Popular Products</h1>
+				<div className="most-popular">
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
+					<ProductPlaceholder />
 				</div>
 
 				<h1>Offer Products</h1>
 				<div className="offer-products-container">
 					<div className="filler">
-						<div className="center-align-hv">
-							Show Products here
+						<div className="filler-row">
+							<ProductPlaceholder />
+							<ProductPlaceholder />
+							<ProductPlaceholder />	
+						</div>
+
+						<div className="filler-row">
+							<ProductPlaceholder />
+							<ProductPlaceholder />
+							<ProductPlaceholder />	
 						</div>
 					</div>
 
