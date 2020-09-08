@@ -26,42 +26,64 @@ export default function BuyingOption(props) {
 	const { value, onBuyingOptionChanged, onRemoveBuyingOption, hideRemoveOptionButton } = props;
 
 	const handleWholesaleChange = (event) => {
-		onBuyingOptionChanged({
-			...value,
-			isWholesale: event.target.checked
-		});
+		onBuyingOptionChanged({ ...value, isWholesale: event.target.checked });
 	};
 
-	const handleInputChange = event => {
-		let changes;
-		const valueNum = Number(event.target.value);
+	const handleUnitChange = event => {
+		onBuyingOptionChanged({ ...value, unit: event.target.value });
+	};
 
-		if (event.target.name === 'offer') { // if offer is changed, bring price in sync
-			changes = { offer: event.target.value };
+	const handleMRPChange = event => {
+		let price;
+		const mrp = event.target.value;
+		const mrpNum = Number(mrp);
+		const offerNum = Number(value.offer);
 
-			if (!isNaN(value.mrp) && !isNaN(valueNum)) {
-				const price = value.mrp - ((valueNum * value.mrp) / 100);
-				changes.price = +price.toFixed(2);
-			}
-		}
-		else if (event.target.name === 'price') { // if price is changed, bring offer in sync
-			changes = { price: event.target.value };
-
-			if (!isNaN(value.mrp) && !isNaN(valueNum)) {
-				const offer = ((value.mrp - valueNum) / value.mrp) * 100;
-				changes.offer = +offer.toFixed(2);
-			}
-		}
-		else { // for any other changes like unit or mrp
-			changes = {
-				[event.target.name]: event.target.value
-			}
+		if (mrp !== "" && !isNaN(mrp) && !isNaN(value.offer)) {
+			const priceCal = mrpNum - ((mrpNum * offerNum) / 100);
+			price = +priceCal.toFixed(2);
+		} else {
+			price = "";
 		}
 
-		onBuyingOptionChanged({
-			...value,
-			...changes
-		});
+		onBuyingOptionChanged({ ...value, mrp, price });
+	};
+
+	const handleOfferChange = event => {
+		let price;
+		const offer = event.target.value;
+		const offerNum = Number(offer);
+		const mrpNum = Number(value.mrp);
+
+		if (offer !== "" && value.mrp !== "" && !isNaN(offerNum) && !isNaN(value.mrp)) {
+			const priceCal = mrpNum - ((offerNum * mrpNum) / 100);
+			price = +priceCal.toFixed(2);
+		}
+		else if (offer === "") {
+			price = value.mrp;
+		}
+		else {
+			price = "";
+		}
+
+		onBuyingOptionChanged({ ...value, offer, price });
+	};
+
+	const handlePriceChange = event => {
+		let offer;
+		const price = event.target.value;
+		const priceNum = Number(price);
+		const mrpNum = Number(value.mrp);
+
+		if (price !== "" && value.mrp !== "" && !isNaN(priceNum) && !isNaN(value.mrp)) {
+			const offerCal = ((mrpNum - priceNum) / mrpNum) * 100;
+			offer = +offerCal.toFixed(2);
+		}
+		else {
+			offer = "";
+		}
+
+		onBuyingOptionChanged({ ...value, offer, price });
 	};
 
 	return (
@@ -87,7 +109,7 @@ export default function BuyingOption(props) {
 				label="Unit *"
 				className={classes.miniInput}
 				value={value.unit}
-				onChange={handleInputChange}
+				onChange={handleUnitChange}
 			/>
 
 			<TextField
@@ -97,7 +119,7 @@ export default function BuyingOption(props) {
 				label="MRP *"
 				className={classes.miniInput}
 				value={value.mrp}
-				onChange={handleInputChange}
+				onChange={handleMRPChange}
 			/>
 
 			<TextField
@@ -107,7 +129,7 @@ export default function BuyingOption(props) {
 				label="Offer (%)"
 				className={classes.miniInput}
 				value={value.offer}
-				onChange={handleInputChange}
+				onChange={handleOfferChange}
 			/>
 
 			<TextField
@@ -117,7 +139,7 @@ export default function BuyingOption(props) {
 				label="Price *"
 				className={classes.miniInput}
 				value={value.price}
-				onChange={handleInputChange}
+				onChange={handlePriceChange}
 			/>
 
 			<XCircle

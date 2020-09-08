@@ -134,6 +134,10 @@ export default function ProductAddEdit (props) {
 		onProductDetailChanged({ disclaimer: e.target.value });
 	};
 
+	const handleProductChanges = () => {
+		console.log(product);
+	};
+
 	let preferenceOptions = preferences || [];
 
 	for(let i=0; i<product.preferences.length; i++) {
@@ -167,6 +171,7 @@ export default function ProductAddEdit (props) {
 						size="small"
 						variant="outlined"
 						label="Product Image *"
+						helperText="Click upload button to upload product image"
 						InputProps={{endAdornment: (
 							<UploadCloud
 								className={classes.uploadButton}
@@ -178,7 +183,7 @@ export default function ProductAddEdit (props) {
 
 				{props.product.buyingOptions.map((buyingOption, index) => (
 					<BuyingOption
-						hideRemoveOptionButton={index === 0}
+						hideRemoveOptionButton={props.product.buyingOptions.length === 1}
 						value={buyingOption}
 						onBuyingOptionChanged={(buyingOption) => handleBuyingOptionChanged(index, buyingOption)}
 						onRemoveBuyingOption={() => props.onRemoveBuyingOption(index)}
@@ -268,7 +273,7 @@ export default function ProductAddEdit (props) {
 				<Button size="large" variant="contained" style={{marginRight: '20px'}} onClick={props.onClose}>
 					Cancel
 				</Button>
-				<Button size="large" variant="contained" color="primary">
+				<Button size="large" variant="contained" color="primary" onClick={handleProductChanges}>
 					{props.isEditing ? "Save Product" : "Add Product"}
 				</Button>
 			</div>
