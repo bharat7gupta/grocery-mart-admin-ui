@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, TextField, Button } from '@material-ui/core';
+import { makeStyles, TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { UploadCloud } from 'react-feather';
 import BuyingOption from './BuyingOption';
@@ -28,7 +28,8 @@ const useStyles = makeStyles(() => ({
     padding: '20px 30px'
   },
   footer: {
-    textAlign: 'right',
+		display: 'flex',
+		justifyContent: 'space-between',
     borderTop: '1px solid #ddd',
     padding: '14px 30px'
   },
@@ -194,10 +195,10 @@ export default function ProductAddEdit (props) {
 		setValidations(currentValidations);
 
 		// check if there are validation messages
-		let noValidationError = false;
+		let noValidationError = true;
 		for (let i=0; i<currentValidations.buyingOptions.length; i++) {
 			if (Object.keys(currentValidations.buyingOptions[i]).length > 0) {
-				noValidationError = true;
+				noValidationError = false;
 				break;
 			}
 		}
@@ -209,6 +210,10 @@ export default function ProductAddEdit (props) {
 		else {
 			setSubmitButtonDisabled(false);
 		}
+	};
+
+	const handleProductActiveChange = (event) => {
+		onProductDetailChanged({ isActive: event.target.checked });
 	};
 
 	let preferenceOptions = preferences || [];
@@ -347,12 +352,25 @@ export default function ProductAddEdit (props) {
 
 
 			<div className={classes.footer}>
-				<Button size="large" variant="contained" style={{marginRight: '20px'}} onClick={props.onClose}>
-					Cancel
-				</Button>
-				<Button size="large" variant="contained" color="primary" onClick={handleProductChanges} disabled={submitButtonDisabled}>
-					{props.isEditing ? "Save Product" : "Add Product"}
-				</Button>
+				<FormControlLabel
+					control={
+						<Switch
+							checked={product.isActive}
+							onChange={handleProductActiveChange}
+							name="isActive"
+							color="primary"
+						/>
+					}
+					label="Active"
+				/>
+				<div>
+					<Button size="large" variant="contained" style={{marginRight: '20px'}} onClick={props.onClose}>
+						Cancel
+					</Button>
+					<Button size="large" variant="contained" color="primary" onClick={handleProductChanges} disabled={submitButtonDisabled}>
+						{props.isEditing ? "Save Product" : "Add Product"}
+					</Button>
+				</div>
 			</div>
 
 			<Toast {...toastInfo} onClose={() => setToastInfo({ showToast: false })} />

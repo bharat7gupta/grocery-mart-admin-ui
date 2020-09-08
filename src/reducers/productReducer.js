@@ -23,7 +23,8 @@ export const productInitialState = {
 	preferences: [],
 	keywords: [],
 	description: "",
-	disclaimer: ""
+	disclaimer: "",
+	isActive: true
 }
 
 export default function productReducer (state, action) {
@@ -51,6 +52,7 @@ export default function productReducer (state, action) {
 		}
 
 		case ProductActions.PRODUCT_DETAIL_CHANGE: {
+			
 			return {
 				...state,
 				...action.data
