@@ -51,10 +51,10 @@ const useStyles = makeStyles(() => ({
 	}
 }));
 
-const units = [
-	'g',
-	'kg',
-	'lt'
+const preferences = [
+	'Small cut chicken',
+	'Medium cut pieces',
+	'Large cut chicken'
 ];
 
 export default function ProductAddEdit (props) {
@@ -99,16 +99,48 @@ export default function ProductAddEdit (props) {
 	const { product, onProductDetailChanged } = props;
 
 	const handleProductNameChange = (e) => {
-		const value = e.target.value;
-
-		onProductDetailChanged({
-			productName: value
-		});
+		onProductDetailChanged({ productName: e.target.value });
 	};
 
 	const handleImageUpload = () => {
 		CloudinaryUtils.openWidget();
 	};
+
+	const handleBuyingOptionChanged = (index, buyingOption) => {
+		const productBuyingOptions = product.buyingOptions.map((bo, i) => {
+			if (i === index) {
+				return buyingOption;
+			}
+
+			return bo;
+		})
+
+		onProductDetailChanged({ buyingOptions: productBuyingOptions });
+	};
+
+	const handlePrefSelect = (data, preferences) => {
+		onProductDetailChanged({ preferences });
+	};
+
+	const handleKeywordsChange = (data, keywords) => {
+		onProductDetailChanged({ keywords });
+	};
+
+	const handleProductDescriptionChange = (e) => {
+		onProductDetailChanged({ description: e.target.value });
+	};
+
+	const handleProductDisclaimerChange = (e) => {
+		onProductDetailChanged({ disclaimer: e.target.value });
+	};
+
+	let preferenceOptions = preferences || [];
+
+	for(let i=0; i<product.preferences.length; i++) {
+		if (preferences && preferences.indexOf(product.preferences[i]) === -1) {
+			preferenceOptions.push(product.preferences[i]);
+		}
+	}
 
 	return (
 		<div className={classes.content}>
@@ -147,7 +179,8 @@ export default function ProductAddEdit (props) {
 				{props.product.buyingOptions.map((buyingOption, index) => (
 					<BuyingOption
 						hideRemoveOptionButton={index === 0}
-						data={buyingOption}
+						value={buyingOption}
+						onBuyingOptionChanged={(buyingOption) => handleBuyingOptionChanged(index, buyingOption)}
 						onRemoveBuyingOption={() => props.onRemoveBuyingOption(index)}
 					/>
 				))}
@@ -161,11 +194,14 @@ export default function ProductAddEdit (props) {
 						multiple
 						size="small"
 						id="preferences-outlined"
-						options={units}
+						options={preferences}
 						getOptionLabel={(option) => option}
 						defaultValue={[]}
 						filterSelectedOptions
 						freeSolo
+						autoSelect
+						value={product.preferences}
+						onChange={handlePrefSelect}
 						renderInput={(params) => (
 							<TextField
 								{...params}
@@ -178,11 +214,25 @@ export default function ProductAddEdit (props) {
 				</div>
 
 				<div className={classes.inputField}>
-					<TextField
-						fullWidth
+					<Autocomplete
+						multiple
 						size="small"
-						variant="outlined"
-						label="Keywords (comma separated)"
+						id="keywords-outlined"
+						getOptionLabel={(option) => option}
+						options={[]}
+						defaultValue={[]}
+						freeSolo
+						autoSelect
+						value={product.keywords}
+						onChange={handleKeywordsChange}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								variant="outlined"
+								label="Keywords"
+								placeholder="Keywords for product search"
+							/>
+						)}
 					/>
 				</div>
 
@@ -193,7 +243,9 @@ export default function ProductAddEdit (props) {
 						variant="outlined"
 						label="Description"
 						multiline
-  					rows={2}
+						rows={2}
+						value={product.description}
+						onChange={handleProductDescriptionChange}
 					/>
 				</div>
 
@@ -204,7 +256,9 @@ export default function ProductAddEdit (props) {
 						variant="outlined"
 						label="Disclaimer"
 						multiline
-  					rows={2}
+						rows={2}
+						value={product.disclaimer}
+						onChange={handleProductDisclaimerChange}
 					/>
 				</div>
 			</div>

@@ -6,14 +6,22 @@ export const ProductActions = {
 	REMOVE_BUYING_OPTION: 'REMOVE_BUYING_OPTION'
 }
 
+const buyingOptionInitialState = {
+	isWholesale: false,
+	unit: "",
+	mrp: "",
+	offer: "",
+	price: ""
+};
+
 export const productInitialState = {
 	productName: '',
 	productImage: '',
 	buyingOptions: [
-		{}
+		buyingOptionInitialState
 	],
-	preferences: "",
-	keywords: "",
+	preferences: [],
+	keywords: [],
 	description: "",
 	disclaimer: ""
 }
@@ -31,7 +39,7 @@ export default function productReducer (state, action) {
 		case ProductActions.ADD_BUYING_OPTION: {
 			return {
 				...state, 
-				buyingOptions: [ ...state.buyingOptions, {} ]
+				buyingOptions: [ ...state.buyingOptions, buyingOptionInitialState ]
 			}
 		}
 
