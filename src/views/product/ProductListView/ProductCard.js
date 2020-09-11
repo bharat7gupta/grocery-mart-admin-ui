@@ -55,7 +55,7 @@ const ProductCard = ({ className, product, onEditProduct, ...rest }) => {
           gutterBottom
           variant="h4"
         >
-          {product.productName} {!onEditProduct && `(${product.productId})`}
+          {product.productName} {`(${product.productId})`}
         </Typography>
 
         <BuyingOptionView values={product.buyingOptions} />

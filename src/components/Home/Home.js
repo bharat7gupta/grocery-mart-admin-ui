@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { Modal, TextField, Button } from '@material-ui/core';
 
 import FileUpload from '../common/FileUpload/FileUpload';
-import { homePageSlots } from '../common/config';
+import { homePageSlots, API_ROOT } from '../common/config';
 import Toast from '../common/Toast/Toast';
 import * as CloudinaryUtils from '../../utils/cloudinaryUtils';
 import homePageConfigReducer, { homePageConfigInitialState, HomePageConfigActions } from '../../reducers/homePageConfigReducer';
@@ -15,7 +15,6 @@ let currentFileUploadKey = "";
 let currentSection = "";
 let sectionIndex = "";
 const URL_REGEX = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-const API_ROOT = "http://localhost:1337";
 const MOST_POPULAR_ITEMS = 16;
 const intArray = Array.from(Array(MOST_POPULAR_ITEMS).keys());
 
@@ -48,7 +47,9 @@ export default function Home() {
 		);
 
 		// fetch home page config
-		fetch(`${API_ROOT}/api/v1/home-page-config/get-all`)
+		fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
+			method: 'POST'
+		})
 			.then(response => {
 				response.json().then(config => {
 					dispatch({
@@ -62,7 +63,7 @@ export default function Home() {
 					const productIds = [].concat(featureProductIds, mostPopularProductIds, offerProductIds);
 
 					if (productIds.length > 0) {
-						fetch(`http://localhost:1337/api/v1/product/get-by-ids`, {
+						fetch(`${API_ROOT}/api/v1/product/get-by-ids`, {
 							method: 'POST',
 							body: JSON.stringify({ productIds })
 						})
@@ -179,7 +180,7 @@ export default function Home() {
 			secure_url: state.pageConfigDraft[currentFileUploadKey].secure_url
 		};
 
-		fetch(`${API_ROOT}/api/v1/home-page-config/set-config`, {
+		fetch(`${API_ROOT}/api/v1/homepageconfig/set-config`, {
 			method: "POST",
 			body: JSON.stringify(requestObj)
 		}).then(response => {
@@ -217,7 +218,7 @@ export default function Home() {
 	};
 
 	const handleAddProductToSlot = () => {
-		fetch(`http://localhost:1337/api/v1/product/get-by-ids`, {
+		fetch(`${API_ROOT}/api/v1/product/get-by-ids`, {
 			method: "POST",
 			body: JSON.stringify({ productIds: [productIdToAdd] })
 		})
@@ -237,7 +238,7 @@ export default function Home() {
 						requestObj.sectionIndex = sectionIndex;
 					}
 
-					fetch(`${API_ROOT}/api/v1/home-page-config/set-config`, {
+					fetch(`${API_ROOT}/api/v1/homepageconfig/set-config`, {
 						method: "POST",
 						body: JSON.stringify(requestObj)
 					}).then(response => {

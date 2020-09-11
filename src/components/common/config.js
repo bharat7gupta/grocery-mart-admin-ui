@@ -100,3 +100,5 @@ export const homePageSlotKeys = [
 	'feature-products',
 	'offer-products'
 ];
+
+export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';

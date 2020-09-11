@@ -12,6 +12,7 @@ import Toolbar from './Toolbar';
 import ProductAddEdit from '../ProductAddEdit';
 import productReducer, { productInitialState, ProductActions } from '../../../reducers/productReducer';
 import Toast from '../../../components/common/Toast/Toast';
+import { API_ROOT } from '../../../components/common/config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +39,7 @@ const ProductList = () => {
   }, []);
 
   const fetchAllProducts = () => {
-    fetch(`http://localhost:1337/api/v1/product/get`)
+    fetch(`${API_ROOT}/api/v1/product/get`)
       .then(response => response.json().then(data => {
         const products = data.data;
         setProducts(products);
@@ -85,7 +86,7 @@ const ProductList = () => {
   };
 
   const handleSubmit = () => {
-    fetch(`http://localhost:1337/api/v1/product/save`, {
+    fetch(`${API_ROOT}/api/v1/product/save`, {
       method: "POST",
       body: JSON.stringify(productState)
     })
