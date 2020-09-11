@@ -39,7 +39,9 @@ const ProductList = () => {
   }, []);
 
   const fetchAllProducts = () => {
-    fetch(`${API_ROOT}/api/v1/product/get`)
+    fetch(`${API_ROOT}/api/v1/product/get`, {
+      method: 'POST'
+    })
       .then(response => response.json().then(data => {
         const products = data.data;
         setProducts(products);
