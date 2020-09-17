@@ -1,71 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
+import { makeStyles, TextField, Button, FormControlLabel, Switch, Checkbox } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { UploadCloud } from 'react-feather';
 import BuyingOption from './BuyingOption';
 import * as CloudinaryUtils from '../../utils/cloudinaryUtils';
 import Toast from '../../components/common/Toast/Toast';
+import { marketPlaces } from '../../components/common/config';
 
 const useStyles = makeStyles(() => ({
 	content: {
-    position: 'absolute',
-		width: '720px',
+		position: 'absolute',
+		width: '840px',
 		maxHeight: '95vh',
 		overflow: 'scroll',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    background: 'white',
-    borderRadius: '4px'
-  },
-  header: {
-    padding: '20px 30px',
-    borderBottom: '1px solid #ddd',
-    fontWeight: 'bold',
-    fontSize: '20px'
-  },
-  body: {
-    padding: '20px 30px'
-  },
-  footer: {
-		display: 'flex',
-		justifyContent: 'space-between',
-    borderTop: '1px solid #ddd',
-    padding: '14px 30px'
-  },
-  inputField: {
-    display: 'block',
-    padding: '16px 0'
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		background: 'white',
+		borderRadius: '4px'
 	},
-	groupInput: {
+	header: {
+		padding: '20px 30px',
+		borderBottom: '1px solid #ddd',
+		fontWeight: 'bold',
+		fontSize: '20px'
+	},
+	body: {
+		padding: '20px 30px'
+	},
+	footer: {
 		display: 'flex',
 		justifyContent: 'space-between',
+		borderTop: '1px solid #ddd',
+		padding: '14px 30px'
+	},
+	marketPlace: {
+		display: 'flex',
+	},
+	marketPlaceText: {
+		fontSize: '18px',
+		fontWeight: 'bold',
+		marginRight: '16px',
+		padding: '9px'
+	},
+	marketPlaceError: {
+		fontSize: '0.9rem',
+		color: '#f44336',
+		padding: '9px'
+	},
+	inputField: {
+		display: 'block',
 		padding: '16px 0'
-	},
-	miniInput: {
-		width: '120px'
 	},
 	uploadButton: {
 		cursor: 'pointer',
-    background: 'white',
-    marginLeft: '8px'
-	}
+		background: 'white',
+		marginLeft: '8px'
+	},
+	multiField: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		padding: '16px 0',
+	},
 }));
 
-const preferences = [
-	'Small cut chicken',
-	'Medium cut chicken',
-	'Large cut chicken'
-];
+let formHasError = false;
 
-export default function ProductAddEdit (props) {
+export default function ProductAddEdit(props) {
 	const classes = useStyles();
-	const { product, onProductDetailChanged } = props;
-	const [ submitButtonDisabled, setSubmitButtonDisabled ] = useState(false);
-	const [didMount, setDidMount] = useState(false)
-	const [ validations, setValidations ] = useState({});
-
-	const [ toastInfo, setToastInfo ] = useState({
+	const { product, onProductDetailChanged, availableCategories = [], availableBrands = [] } = props;
+	const { preferences, categories, brands } = props;
+	const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+	const [validations, setValidations] = useState({});
+	const [toastInfo, setToastInfo] = useState({
 		showToast: false,
 		severity: "",
 		message: ""
@@ -85,21 +92,15 @@ export default function ProductAddEdit (props) {
 			cloudinarySuccessEventCallback,
 			cloudinaryErrorEventCallback
 		);
-
-		setDidMount(true);
 	}, []);
-
-	useEffect(() => {
-		if (didMount) {
-			setValidations(getValidationMessages());
-		}
-	}, [ product ]);
 
 	const cloudinarySuccessEventCallback = uploadInfo => {
 		if (uploadInfo) {
 			onProductDetailChanged({
 				productImage: uploadInfo.secure_url
 			});
+
+			validateProductImage(uploadInfo.secure_url);
 
 			showToast("success", "Image uploaded successfully");
 		}
@@ -109,8 +110,54 @@ export default function ProductAddEdit (props) {
 		showToast("error", message || "Something went wrong. Please try again!");
 	};
 
+	const handleMarketPlaceChange = (marketPlace, selected) => {
+		let marketPlaces;
+		const selectedMarketPlaces = product.marketPlaces || [];
+
+		if (selected) {
+			marketPlaces = [ ...selectedMarketPlaces, marketPlace ];
+			onProductDetailChanged({ marketPlaces });
+		}
+		else {
+			marketPlaces = selectedMarketPlaces.filter(m => m !== marketPlace);
+			onProductDetailChanged({ marketPlaces });
+		}
+
+		validateMarketPlaces(marketPlaces);
+	};
+
+	const isMarketPlaceSelected = (marketPlace) => {
+		const selectedMarketPlaces = product.marketPlaces || [];
+		return selectedMarketPlaces.indexOf(marketPlace) > -1;
+	}
+
+	const shouldEnableWholesaleBuyingOption = () => {
+		const selectedMarketPlaces = product.marketPlaces || [];
+		const [ retailMarketPlace, ...otherMarketPlaces ] = marketPlaces;
+		if (
+			selectedMarketPlaces.indexOf(retailMarketPlace) > -1 &&
+			!selectedMarketPlaces.some(m => otherMarketPlaces.indexOf(m) > -1)
+		) {
+			return false;
+		}
+
+		return true;
+	};
+
 	const handleProductNameChange = (e) => {
-		onProductDetailChanged({ productName: e.target.value });
+		const productName = e.target.value;
+		onProductDetailChanged({ productName });
+		validateProductName(productName);
+	};
+
+	const handleProductCategoryChange = (data, category) => {
+		onProductDetailChanged({ category });
+		validateProductCategory(category);
+	};
+
+	const handleProductBrandChange = (data, brand) => {
+		onProductDetailChanged({ brand });
+		validateProductBrand(brand);
 	};
 
 	const handleImageUpload = () => {
@@ -124,9 +171,10 @@ export default function ProductAddEdit (props) {
 			}
 
 			return bo;
-		})
+		});
 
 		onProductDetailChanged({ buyingOptions: productBuyingOptions });
+		validateProductBuyingOptions(productBuyingOptions);
 	};
 
 	const handlePrefSelect = (data, preferences) => {
@@ -145,88 +193,154 @@ export default function ProductAddEdit (props) {
 		onProductDetailChanged({ disclaimer: e.target.value });
 	};
 
-	const getValidationMessages = (onSubmit) => {
-		let validations = {};
+	// validation functions
+	const validateMarketPlaces = (marketPlaces) => {
+		let validationMessage = "";
 
-		// product name validation
-		if (!product.productName || product.productName.trim() === "") {
-			validations.productName = "Enter valid product name";
+		if (!marketPlaces || marketPlaces.length === 0) {
+			validationMessage = "Select at least one marketplace";
+			formHasError = true;
 		}
 
-		// product name validation
-		if (onSubmit && (!product.productImage || product.productImage.trim() === "")) {
-			validations.productImage = "error"
+		setValidations((prevState) => ({
+			...prevState,
+			marketPlaces: validationMessage
+		}));
+	}
+
+	const validateProductName = (productName) => {
+		let validationMessage = "";
+
+		if (!productName || productName.trim() === "") {
+			validationMessage = "Enter valid product name";
+			formHasError = true;
 		}
 
-		// product buying options validation
-		if (onSubmit && product.buyingOptions) {
-			validations.buyingOptions = [];
+		setValidations((prevState) => ({
+			...prevState,
+			productName: validationMessage
+		}));
+	};
 
-			for (let i=0; i<product.buyingOptions.length; i++) {
-				const currentBOValidation = {};
-				const currentBuyingOption = product.buyingOptions[i];
+	const validateProductCategory = (category) => {
+		let validationMessage = "";
 
-				if (!currentBuyingOption.unit || currentBuyingOption.unit.trim() === "") {
-					currentBOValidation.unit = "Invalid";
-				}
+		if (!category || category.trim() === "") {
+			validationMessage = "Enter valid product category";
+			formHasError = true;
+		}
 
-				if (!currentBuyingOption.mrp || isNaN(currentBuyingOption.mrp)) {
-					currentBOValidation.mrp = "Invalid";
-				}
+		setValidations((prevState) => ({
+			...prevState,
+			category: validationMessage
+		}));
+	};
 
-				if (currentBuyingOption.offer && isNaN(currentBuyingOption.offer)) {
-					currentBOValidation.offer = "Invalid";
-				}
+	const validateProductBrand = (brand) => {
+		let validationMessage = "";
 
-				if (!currentBuyingOption.price || isNaN(currentBuyingOption.price)) {
-					currentBOValidation.price = "Invalid";
-				}
+		if (!brand || brand.trim() === "") {
+			validationMessage = "Enter valid product brand";
+			formHasError = true;
+		}
 
-				validations.buyingOptions.push(currentBOValidation);
+		setValidations((prevState) => ({
+			...prevState,
+			brand: validationMessage
+		}));
+	};
+
+	const validateProductImage = (productImage) => {
+		let validationMessage = "";
+
+		if (!productImage || productImage.trim() === "") {
+			validationMessage = "error";
+			formHasError = true;
+		}
+
+		setValidations((prevState) => ({
+			...prevState,
+			productImage: validationMessage
+		}));
+	};
+
+	const validateProductBuyingOptions = (buyingOptions) => {
+		let buyingOptionsValidation = [];
+
+		for (let i = 0; i < buyingOptions.length; i++) {
+			const currentBOValidation = {};
+			const currentBuyingOption = buyingOptions[i];
+
+			currentBOValidation.unit = "";
+			currentBOValidation.inventory = "";
+			currentBOValidation.mrp = "";
+			currentBOValidation.offer = "";
+			currentBOValidation.price = "";
+
+			if (!currentBuyingOption.unit || currentBuyingOption.unit.trim() === "") {
+				currentBOValidation.unit = "Invalid";
+				formHasError = true;
 			}
+
+			if (!currentBuyingOption.inventory || isNaN(currentBuyingOption.inventory)) {
+				currentBOValidation.inventory = "Invalid";
+				formHasError = true;
+			}
+
+			if (!currentBuyingOption.mrp || isNaN(currentBuyingOption.mrp)) {
+				currentBOValidation.mrp = "Invalid";
+				formHasError = true;
+			}
+
+			if (currentBuyingOption.offer && isNaN(currentBuyingOption.offer)) {
+				currentBOValidation.offer = "Invalid";
+				formHasError = true;
+			}
+
+			if (!currentBuyingOption.price || isNaN(currentBuyingOption.price)) {
+				currentBOValidation.price = "Invalid";
+				formHasError = true;
+			}
+
+			buyingOptionsValidation.push(currentBOValidation);
 		}
 
-		return validations;
+		setValidations((prevState) => ({
+			...prevState,
+			buyingOptions: buyingOptionsValidation
+		}));
+	}
+
+
+	const validateForm = () => {
+		validateMarketPlaces(product.marketPlaces);
+		validateProductName(product.productName);
+		validateProductCategory(product.category);
+		validateProductBrand(product.brand);
+		validateProductImage(product.productImage);
+		validateProductBuyingOptions(product.buyingOptions);
 	}
 
 	const handleProductChanges = () => {
 		setSubmitButtonDisabled(true);
-		const currentValidations = getValidationMessages(true);
-		setValidations(currentValidations);
+		formHasError = false;
+		validateForm();
 
-		// check if there are validation messages
-		let noValidationError = true;
-		for (let i=0; i<currentValidations.buyingOptions.length; i++) {
-			if (Object.keys(currentValidations.buyingOptions[i]).length > 0) {
-				noValidationError = false;
-				break;
-			}
-		}
-
-		// if there are no validation messages, initiate api request
-		if (Object.keys(currentValidations).length === 1 && noValidationError) {
-			try {
-				props.onSubmit();
-			} catch(e) {
-				showToast("error", "Something went wrong. Please try again!");
-			}
+		if (formHasError) {
+			setSubmitButtonDisabled(false);
 		}
 		else {
-			setSubmitButtonDisabled(false);
+			try {
+				props.onSubmit();
+			} catch (e) {
+				showToast("error", "Something went wrong. Please try again!");
+			}
 		}
 	};
 
 	const handleProductActiveChange = (event) => {
 		onProductDetailChanged({ isActive: event.target.checked });
 	};
-
-	let preferenceOptions = preferences || [];
-
-	for(let i=0; i<product.preferences.length; i++) {
-		if (preferences && preferences.indexOf(product.preferences[i]) === -1) {
-			preferenceOptions.push(product.preferences[i]);
-		}
-	}
 
 	return (
 		<div className={classes.content}>
@@ -235,6 +349,27 @@ export default function ProductAddEdit (props) {
 			</div>
 
 			<div className={classes.body}>
+				<div className={classes.marketPlace}>
+					<span className={classes.marketPlaceText}>Marketplace: </span>
+					{marketPlaces.map((marketPlace) => (
+						<FormControlLabel
+							key={marketPlace}
+							control={
+								<Checkbox
+									name={`${marketPlace}retailMarketPlace`}
+									size="small"
+									color="primary"
+									checked={isMarketPlaceSelected(marketPlace)}
+									onChange={(event) => handleMarketPlaceChange(marketPlace, event.target.checked)}
+								/>
+							}
+							label={marketPlace}
+							style={{textTransform: 'capitalize'}}
+						/>
+					))}
+					<span className={classes.marketPlaceError}>{validations.marketPlaces}</span>
+				</div>
+
 				<div className={classes.inputField}>
 					<TextField
 						fullWidth
@@ -248,6 +383,54 @@ export default function ProductAddEdit (props) {
 					/>
 				</div>
 
+				<div className={classes.multiField}>
+					<Autocomplete
+						size="small"
+						id="category-outlined"
+						options={categories}
+						getOptionLabel={option => option}
+						defaultValue=''
+						freeSolo
+						autoSelect
+						value={product.category}
+						onChange={handleProductCategoryChange}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								variant="outlined"
+								label="Product Category *"
+								error={!!validations.category}
+								helperText={validations.category}
+							/>
+						)}
+						style={{flexBasis: '49%'}}
+						ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
+					/>
+
+					<Autocomplete
+						size="small"
+						id="brand-outlined"
+						options={brands}
+						getOptionLabel={option => option}
+						defaultValue=''
+						freeSolo
+						autoSelect
+						value={product.brand}
+						onChange={handleProductBrandChange}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								variant="outlined"
+								label="Brand *"
+								error={!!validations.brand}
+								helperText={validations.brand}
+							/>
+						)}
+						style={{flexBasis: '49%'}}
+						ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
+					/>
+				</div>
+
 				<div className={classes.inputField}>
 					<TextField
 						fullWidth
@@ -257,12 +440,14 @@ export default function ProductAddEdit (props) {
 						label="Product Image *"
 						error={!!validations.productImage}
 						helperText="Click upload button to upload product image"
-						InputProps={{endAdornment: (
-							<UploadCloud
-								className={classes.uploadButton}
-								onClick={handleImageUpload}
-							/>
-						)}}
+						InputProps={{
+							endAdornment: (
+								<UploadCloud
+									className={classes.uploadButton}
+									onClick={handleImageUpload}
+								/>
+							)
+						}}
 					/>
 				</div>
 
@@ -270,6 +455,7 @@ export default function ProductAddEdit (props) {
 					<BuyingOption
 						hideRemoveOptionButton={props.product.buyingOptions.length === 1}
 						value={buyingOption}
+						enableWholesale={shouldEnableWholesaleBuyingOption()}
 						validation={(validations.buyingOptions && validations.buyingOptions[index]) || {}}
 						onBuyingOptionChanged={(buyingOption) => handleBuyingOptionChanged(index, buyingOption)}
 						onRemoveBuyingOption={() => props.onRemoveBuyingOption(index)}
@@ -277,8 +463,8 @@ export default function ProductAddEdit (props) {
 				))}
 
 				<Button color="primary" onClick={props.onAddBuyingOption}>Add Buying Option</Button>
-				
-				<br/><br/>
+
+				<br /><br />
 
 				<div className={classes.inputField}>
 					<Autocomplete
@@ -301,6 +487,7 @@ export default function ProductAddEdit (props) {
 								placeholder="Chicken small cut, large cut etc"
 							/>
 						)}
+						ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
 					/>
 				</div>
 
@@ -324,6 +511,7 @@ export default function ProductAddEdit (props) {
 								placeholder="Keywords for product search"
 							/>
 						)}
+						ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
 					/>
 				</div>
 
@@ -368,7 +556,7 @@ export default function ProductAddEdit (props) {
 					label="Active"
 				/>
 				<div>
-					<Button size="large" variant="contained" style={{marginRight: '20px'}} onClick={props.onClose}>
+					<Button size="large" variant="contained" style={{ marginRight: '20px' }} onClick={props.onClose}>
 						Cancel
 					</Button>
 					<Button size="large" variant="contained" color="primary" onClick={handleProductChanges} disabled={submitButtonDisabled}>

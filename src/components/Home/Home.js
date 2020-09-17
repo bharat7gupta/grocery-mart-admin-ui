@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { useParams } from 'react-router-dom';
 import { Modal, TextField, Button } from '@material-ui/core';
 
 import FileUpload from '../common/FileUpload/FileUpload';
@@ -19,6 +20,7 @@ const MOST_POPULAR_ITEMS = 16;
 const intArray = Array.from(Array(MOST_POPULAR_ITEMS).keys());
 
 export default function Home() {
+	const params = useParams();
 	const [ state, dispatch ] = useReducer(homePageConfigReducer, homePageConfigInitialState);
 	const [ productsState, productDispatch ] = useReducer(productsMapReducer, {});
 
@@ -48,7 +50,8 @@ export default function Home() {
 
 		// fetch home page config
 		fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
-			method: 'POST'
+			method: 'POST',
+			body: JSON.stringify({ type: params.type })
 		})
 			.then(response => {
 				response.json().then(config => {
@@ -72,12 +75,11 @@ export default function Home() {
 								type: ProductsMapActions.ADD_PRODUCTS,
 								data: data.data
 							});
-							console.log('dispatching product action');
 						}));
 					}
 				});
 			});
-	}, []);
+	}, [params.type]);
 
 	const cloudinarySuccessEventCallback = uploadInfo => {
 		dispatch({
@@ -176,6 +178,7 @@ export default function Home() {
 
 		const requestObj = {
 			...imageInfoModalData,
+			type: params.type,
 			key: currentFileUploadKey,
 			secure_url: state.pageConfigDraft[currentFileUploadKey].secure_url
 		};
@@ -228,12 +231,11 @@ export default function Home() {
 					showToast("success", "Product found! Updating...");
 
 					let requestObj = {
+						type: params.type,
 						key: currentSection,
 						productId: productIdToAdd
 					};
 
-					console.log("sectionIndex", sectionIndex)
-					console.log(sectionIndex !== "" && sectionIndex !== undefined && !isNaN(sectionIndex));
 					if (sectionIndex !== "" && sectionIndex !== undefined && !isNaN(sectionIndex)) {
 						requestObj.sectionIndex = sectionIndex;
 					}

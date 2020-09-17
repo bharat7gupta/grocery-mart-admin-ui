@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, TextField, FormControlLabel, Checkbox } from '@material-ui/core';
 import { XCircle } from 'react-feather';
 
@@ -21,16 +21,34 @@ const useStyles = makeStyles(() => ({
 		cursor: 'pointer'
 	}
 }));
+
 export default function BuyingOption(props) {
 	const classes = useStyles();
-	const { value, onBuyingOptionChanged, onRemoveBuyingOption, hideRemoveOptionButton, validation } = props;
+	const { value, onBuyingOptionChanged, onRemoveBuyingOption, hideRemoveOptionButton, validation, enableWholesale } = props;
+
+	useEffect(() => {
+		if (!enableWholesale) {
+			onBuyingOptionChanged({ ...value, isWholesale: false });
+		}
+	}, [enableWholesale]);
 
 	const handleWholesaleChange = (event) => {
+		if (!props.enableWholesale) return;
+
 		onBuyingOptionChanged({ ...value, isWholesale: event.target.checked });
 	};
 
 	const handleUnitChange = event => {
 		onBuyingOptionChanged({ ...value, unit: event.target.value });
+	};
+
+	const handleInventoryChange = event => {
+		const inventory = event.target.value;
+		const inventoryNum = Number(inventory);
+
+		if (!isNaN(inventory)) {
+			onBuyingOptionChanged({ ...value, inventory: event.target.value });
+		}
 	};
 
 	const handleMRPChange = event => {
@@ -96,6 +114,7 @@ export default function BuyingOption(props) {
 						color="primary"
 						checked={value.isWholesale}
 						onChange={handleWholesaleChange}
+						disabled={!enableWholesale}
 					/>
 				}
 				label="Wholesale"
@@ -112,6 +131,18 @@ export default function BuyingOption(props) {
 				onChange={handleUnitChange}
 				error={!!validation.unit}
 				helperText={validation.unit}
+			/>
+
+			<TextField
+				name="unit"
+				size="small"
+				variant="outlined"
+				label="Inventory *"
+				className={classes.miniInput}
+				value={value.inventory}
+				onChange={handleInventoryChange}
+				error={!!validation.inventory}
+				helperText={validation.inventory}
 			/>
 
 			<TextField

@@ -31,12 +31,31 @@ const ProductList = () => {
   const [ products, setProducts ] = useState([]);
   const [ showModal, setShowModal ] = useState(false);
   const [ editing, setEditing ] = useState(false);
+  const [ preferences, setPreferences ] = useState([]);
+  const [ categories, setCategories ] = useState([]);
+  const [ brands, setBrands ] = useState([]);
   const [ productState, dispatch ] = useReducer(productReducer, productInitialState);
 
   useEffect(() => {
     // load products
     fetchAllProducts();
+
+    fetchConfigs();
   }, []);
+
+  const fetchConfigs = () => {
+    fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
+			method: 'POST',
+			body: JSON.stringify({ type: 'dates' })
+		})
+			.then(response => {
+				response.json().then(config => {
+          setPreferences(config.data.preferences || []);
+          setCategories(config.data.categories || []);
+          setBrands(config.data.brands || []);
+				});
+			});
+  };
 
   const fetchAllProducts = () => {
     fetch(`${API_ROOT}/api/v1/product/get`, {
@@ -156,6 +175,9 @@ const ProductList = () => {
           <ProductAddEdit
             isEditing={editing}
             product={productState}
+            preferences={preferences}
+            categories={categories}
+            brands={brands}
             onProductDetailChanged={handleProductDetailChanged}
             onAddBuyingOption={handleAddBuyingOption}
             onRemoveBuyingOption={handleRemoveBuyingOption}

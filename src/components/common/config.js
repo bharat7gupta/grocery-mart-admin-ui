@@ -69,7 +69,7 @@ export const homePageSlots = {
 		key: 'feature-banner',
 		config: {
 			styles: {
-				width: '360px',
+				minWidth: '360px',
 				height: '750px',
 				backgroundSize: 'cover',
 				marginRight: '20px'
@@ -81,7 +81,7 @@ export const homePageSlots = {
 		key: 'offer-banner',
 		config: {
 			styles: {
-				width: '360px',
+				minWidth: '360px',
 				height: '750px',
 				backgroundSize: 'cover',
 				marginLeft: '20px'
@@ -101,4 +101,12 @@ export const homePageSlotKeys = [
 	'offer-products'
 ];
 
-export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';
+export const marketPlaces = [
+	'retail',
+	'wholesaler',
+	'dates',
+	'restaurant'
+];
+
+// export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';
+export const API_ROOT = 'http://localhost:1337';

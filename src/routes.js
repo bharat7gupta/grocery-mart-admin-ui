@@ -18,7 +18,7 @@ const routes = [
     path: 'app',
     element: <DashboardLayout />,
     children: [
-      { path: 'home', element: <Home /> },
+      { path: 'home/:type', element: <Home /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'account', element: <AccountView /> },
       { path: 'customers', element: <CustomerListView /> },

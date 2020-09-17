@@ -23,9 +23,24 @@ import NavItem from './NavItem';
 
 const items = [
   {
-    href: '/app/home',
+    href: '/app/home/customer',
     icon: HomeIcon,
-    title: 'Home Page Builder'
+    title: 'Home Page - Retail'
+  },
+  {
+    href: '/app/home/wholesaler',
+    icon: HomeIcon,
+    title: 'Home Page - Wholesaler'
+  },
+  {
+    href: '/app/home/dates',
+    icon: HomeIcon,
+    title: 'Home Page - Dates'
+  },
+  {
+    href: '/app/home/restaurant',
+    icon: HomeIcon,
+    title: 'Home Page - Restaurant'
   },
   {
     href: '/app/products',

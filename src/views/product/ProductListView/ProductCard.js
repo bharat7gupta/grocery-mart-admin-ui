@@ -29,7 +29,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductCard = ({ className, product, onEditProduct, ...rest }) => {
+  if (!product) {
+    return null;
+  }
+
   const classes = useStyles();
+  const productImageDimStyles = { width: '256px', height: '256px' };
+  const productInactiveStyles = product.isActive ? {} : { filter: 'grayscale(1)', opacity: '0.6' };
+  const productStyles = { ...productImageDimStyles, ...productInactiveStyles };
 
   return (
     <Card
@@ -45,7 +52,7 @@ const ProductCard = ({ className, product, onEditProduct, ...rest }) => {
           <Avatar
             alt="Product"
             src={product.productImage}
-            style={{ width: '256px', height: '256px' }}
+            style={productStyles}
             variant="square"
           />
         </Box>

@@ -121,6 +121,7 @@ h1 {
 .product-card-container {
     position: relative;
     margin: 0 12px;
+    flex: 1;
 }
 
 .product-card-container:first-child {
