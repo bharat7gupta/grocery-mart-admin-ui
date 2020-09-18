@@ -51,6 +51,7 @@ export default function Home() {
 		// fetch home page config
 		fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
 			method: 'POST',
+			credentials: 'include',
 			body: JSON.stringify({ type: params.type })
 		})
 			.then(response => {
