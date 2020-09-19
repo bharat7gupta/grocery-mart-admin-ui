@@ -7,13 +7,13 @@ export const HomePageConfigActions = {
 export const homePageConfigInitialState = {
 	pageConfig: {
 		"top-banner-1": null,
-			"top-banner-2": null,
-			"top-banner-3": null,
-			"puzzle-left": null,
-			"puzzle-right-top": null,
-			"puzzle-right-bottom": null,
-			"feature-products": null,
-			"offer-products": null
+		"top-banner-2": null,
+		"top-banner-3": null,
+		"puzzle-left": null,
+		"puzzle-right-top": null,
+		"puzzle-right-bottom": null,
+		"feature-products": null,
+		"offer-products": null
 	},
 	pageConfigDraft: {}
 }

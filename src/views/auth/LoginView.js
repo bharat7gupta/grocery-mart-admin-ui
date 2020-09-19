@@ -61,7 +61,7 @@ const LoginView = () => {
                 .then(response => response.json().then(data => {
                   if (data.code === 'success') {
                     localStorage.setItem('username', data.data.username);
-                    navigate('/app/home/customer', { replace: true });
+                    navigate('/app/home/retail', { replace: true });
                   }
                   else {
                     actions.setSubmitting(false);

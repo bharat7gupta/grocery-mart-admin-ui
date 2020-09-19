@@ -23,7 +23,7 @@ import NavItem from './NavItem';
 
 const items = [
   {
-    href: '/app/home/customer',
+    href: '/app/home/retail',
     icon: HomeIcon,
     title: 'Home Page - Retail'
   },
