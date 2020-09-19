@@ -120,6 +120,14 @@ const ProductList = () => {
           showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
         }
 
+        if (categories.indexOf(productState.category) === -1) {
+          setCategories([...categories, productState.category]);
+        }
+
+        if (brands.indexOf(productState.brand) === -1) {
+          setBrands([...brands, productState.brand]);
+        }
+
         setShowModal(false);
         fetchAllProducts();
       });

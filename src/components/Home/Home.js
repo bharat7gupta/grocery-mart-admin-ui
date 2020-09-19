@@ -51,7 +51,6 @@ export default function Home() {
 		// fetch home page config
 		fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
 			method: 'POST',
-			credentials: 'include',
 			body: JSON.stringify({ type: params.type })
 		})
 			.then(response => {
@@ -330,7 +329,7 @@ export default function Home() {
 			return (
 				<div className="product-card-container">
 					<ProductCard
-						product={productsState[productId]}
+						product={productsState[productId] }
 						className="product-card"
 					/>
 					<div className="product-overlay">
@@ -347,7 +346,7 @@ export default function Home() {
 		}
 		else {
 			return (
-				<ProductPlaceholder onAddProduct={() => handleAddProductClick(section)} />
+				<ProductPlaceholder onAddProduct={() => handleAddProductClick(section, index)} />
 			)
 		}
 	};
