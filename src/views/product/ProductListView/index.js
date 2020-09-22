@@ -107,9 +107,15 @@ const ProductList = () => {
   };
 
   const handleSubmit = () => {
+    const productToSave = productState;
+  
+    productToSave.buyingOptions = productState.buyingOptions.map(bo => {
+      return { ...bo, price: Number(bo.price) };
+    });
+
     fetch(`${API_ROOT}/api/v1/product/save`, {
       method: "POST",
-      body: JSON.stringify(productState)
+      body: JSON.stringify(productToSave)
     })
     .then(response => {
       response.json().then(data => {

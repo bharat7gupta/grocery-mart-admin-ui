@@ -23,6 +23,7 @@ export const productInitialState = {
 	],
 	preferences: [],
 	keywords: [],
+	keyFeatures: "",
 	description: "",
 	disclaimer: "",
 	isActive: true

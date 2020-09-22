@@ -189,6 +189,10 @@ export default function ProductAddEdit(props) {
 		onProductDetailChanged({ description: e.target.value });
 	};
 
+	const handleKeyFeaturesChange = (e) => {
+		onProductDetailChanged({ keyFeatures: e.target.value });
+	};
+
 	const handleProductDisclaimerChange = (e) => {
 		onProductDetailChanged({ disclaimer: e.target.value });
 	};
@@ -512,6 +516,19 @@ export default function ProductAddEdit(props) {
 							/>
 						)}
 						ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
+					/>
+				</div>
+
+				<div className={classes.inputField}>
+					<TextField
+						fullWidth
+						size="small"
+						variant="outlined"
+						label="Key Features"
+						multiline
+						rows={2}
+						value={product.keyFeatures}
+						onChange={handleKeyFeaturesChange}
 					/>
 				</div>
 
