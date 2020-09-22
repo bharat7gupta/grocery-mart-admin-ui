@@ -3,13 +3,14 @@ import { makeStyles, Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-	  minWidth: '330px',
-	  height: '363px',
-	  backgroundColor: '#E4EBF1',
+		minWidth: '330px',
+		height: '363px',
+		backgroundColor: '#E4EBF1',
 		margin: '0 12px',
 		position: 'relative',
+		flex: '1 1',
 
-	  '&:first-child': {
+	  	'&:first-child': {
 			marginLeft: 0,
 		},
 		'&:last-child': {
