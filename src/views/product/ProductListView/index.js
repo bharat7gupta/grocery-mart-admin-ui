@@ -13,6 +13,7 @@ import ProductAddEdit from '../ProductAddEdit';
 import productReducer, { productInitialState, ProductActions } from '../../../reducers/productReducer';
 import Toast from '../../../components/common/Toast/Toast';
 import { API_ROOT } from '../../../components/common/config';
+import apiCall from '../../../ApiHelper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,27 +45,20 @@ const ProductList = () => {
   }, []);
 
   const fetchConfigs = () => {
-    fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
-			method: 'POST',
-			body: JSON.stringify({ type: 'dates' })
-		})
-			.then(response => {
-				response.json().then(config => {
-          setPreferences(config.data.preferences || []);
-          setCategories(config.data.categories || []);
-          setBrands(config.data.brands || []);
-				});
-			});
+    apiCall(`${API_ROOT}/api/v1/homepageconfig/get`, 'POST', { type: 'dates' })
+			.then(config => {
+        setPreferences(config.data.preferences || []);
+        setCategories(config.data.categories || []);
+        setBrands(config.data.brands || []);
+      });
   };
 
   const fetchAllProducts = () => {
-    fetch(`${API_ROOT}/api/v1/product/get`, {
-      method: 'POST'
-    })
-      .then(response => response.json().then(data => {
+    apiCall(`${API_ROOT}/api/v1/product/get`, 'POST', {})
+      .then(data => {
         const products = data.data;
         setProducts(products);
-      }));
+      });
   }
 
   const handleAddProductClick = () => {
@@ -113,30 +107,25 @@ const ProductList = () => {
       return { ...bo, price: Number(bo.price) };
     });
 
-    fetch(`${API_ROOT}/api/v1/product/save`, {
-      method: "POST",
-      body: JSON.stringify(productToSave)
-    })
-    .then(response => {
-      response.json().then(data => {
-        if (editing) {
-          showToast("success", `Product Saved Successfully!`);
-        }
-        else {
-          showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
-        }
+    apiCall(`${API_ROOT}/api/v1/product/save`, 'POST', productToSave)
+    .then(data => {
+      if (editing) {
+        showToast("success", `Product Saved Successfully!`);
+      }
+      else {
+        showToast("success", `Product Added Successfully with ID: ${data.data.productId}`);
+      }
 
-        if (categories.indexOf(productState.category) === -1) {
-          setCategories([...categories, productState.category]);
-        }
+      if (categories.indexOf(productState.category) === -1) {
+        setCategories([...categories, productState.category]);
+      }
 
-        if (brands.indexOf(productState.brand) === -1) {
-          setBrands([...brands, productState.brand]);
-        }
+      if (brands.indexOf(productState.brand) === -1) {
+        setBrands([...brands, productState.brand]);
+      }
 
-        setShowModal(false);
-        fetchAllProducts();
-      });
+      setShowModal(false);
+      fetchAllProducts();
     });
   }
 

@@ -39,6 +39,11 @@ const TopBar = ({
   const classes = useStyles();
   const [notifications] = useState([]);
 
+  const handleLogoutClick = () => {
+    localStorage.setItem('token', '');
+    window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/login';
+  };
+
   return (
     <AppBar
       className={clsx(classes.root, className)}
@@ -61,7 +66,7 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleLogoutClick}>
             <InputIcon />
           </IconButton>
         </Hidden>

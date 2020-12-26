@@ -19,6 +19,7 @@ import {
   Users as UsersIcon,
   Home as HomeIcon
 } from 'react-feather';
+import InputIcon from '@material-ui/icons/Input';
 import NavItem from './NavItem';
 
 const items = [
@@ -51,16 +52,6 @@ const items = [
     href: '/app/customers',
     icon: UsersIcon,
     title: 'Customers'
-  },
-  {
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
-  },
-  {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
   }
 ];
 
@@ -91,6 +82,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    localStorage.setItem('token', '');
+    window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/login';
+  };
+
   const content = (
     <Box
       height="100%"
@@ -107,6 +104,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               icon={item.icon}
             />
           ))}
+
+          <NavItem
+            href='/login'
+            onClick={handleLogoutClick}
+            title='Logout'
+            icon={InputIcon}
+          />
         </List>
       </Box>
       <Box flexGrow={1} />

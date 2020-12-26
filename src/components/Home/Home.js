@@ -10,6 +10,7 @@ import homePageConfigReducer, { homePageConfigInitialState, HomePageConfigAction
 import productsMapReducer, { ProductsMapActions } from '../../reducers/productsMapReducer';
 import ProductPlaceholder from './ProductPlaceholder';
 import ProductCard from '../../views/product/ProductListView/ProductCard';
+import apiCall from '../../ApiHelper';
 import './Home.css';
 
 let currentFileUploadKey = "";
@@ -49,35 +50,32 @@ export default function Home() {
 		);
 
 		// fetch home page config
-		fetch(`${API_ROOT}/api/v1/homepageconfig/get`, {
-			method: 'POST',
-			body: JSON.stringify({ type: params.type })
-		})
-			.then(response => {
-				response.json().then(config => {
-					dispatch({
-						type: HomePageConfigActions.SET_CONFIG,
-						data: config.data
-					});
+		apiCall(`${API_ROOT}/api/v1/homepageconfig/get`, 'POST', { type: params.type })
+			.then(config => {
+				if (config.error) {
+					alert('Something went wrong. Please refresh page.');
+					return;
+				}
 
-					const featureProductIds = config.data['feature-products'] || [];
-					const mostPopularProductIds = config.data['most-popular-products'] || [];
-					const offerProductIds = config.data['offer-products'] || [];
-					const productIds = [].concat(featureProductIds, mostPopularProductIds, offerProductIds);
+				dispatch({
+					type: HomePageConfigActions.SET_CONFIG,
+					data: config.data
+				});
 
-					if (productIds.length > 0) {
-						fetch(`${API_ROOT}/api/v1/product/get-by-ids`, {
-							method: 'POST',
-							body: JSON.stringify({ productIds })
-						})
-						.then(response => response.json().then(data => {
+				const featureProductIds = config.data['feature-products'] || [];
+				const mostPopularProductIds = config.data['most-popular-products'] || [];
+				const offerProductIds = config.data['offer-products'] || [];
+				const productIds = [].concat(featureProductIds, mostPopularProductIds, offerProductIds);
+
+				if (productIds.length > 0) {
+					apiCall(`${API_ROOT}/api/v1/product/get-by-ids`, 'POST', { productIds })
+						.then(data => {
 							productDispatch({
 								type: ProductsMapActions.ADD_PRODUCTS,
 								data: data.data
 							});
-						}));
-					}
-				});
+						})
+				}
 			});
 	}, [params.type]);
 
@@ -183,17 +181,13 @@ export default function Home() {
 			secure_url: state.pageConfigDraft[currentFileUploadKey].secure_url
 		};
 
-		fetch(`${API_ROOT}/api/v1/homepageconfig/set-config`, {
-			method: "POST",
-			body: JSON.stringify(requestObj)
-		}).then(response => {
-			response.json().then(config => {
-				dispatch({
-					type: HomePageConfigActions.SET_CONFIG,
-					data: config.data
+		apiCall(`${API_ROOT}/api/v1/homepageconfig/set-config`, 'POST', requestObj)
+			.then(config => {
+					dispatch({
+						type: HomePageConfigActions.SET_CONFIG,
+						data: config.data
+					});
 				});
-			});
-		});
 	};
 
 	const handleNavigatingUrlChange = (e) => {
@@ -221,12 +215,8 @@ export default function Home() {
 	};
 
 	const handleAddProductToSlot = () => {
-		fetch(`${API_ROOT}/api/v1/product/get-by-ids`, {
-			method: "POST",
-			body: JSON.stringify({ productIds: [productIdToAdd] })
-		})
-		.then(response => {
-			response.json().then(data => {
+		apiCall(`${API_ROOT}/api/v1/product/get-by-ids`, 'POST', { productIds: [productIdToAdd] })
+			.then(data => {
 				if (data.data && data.data.length === 1) {
 					showToast("success", "Product found! Updating...");
 
@@ -240,19 +230,16 @@ export default function Home() {
 						requestObj.sectionIndex = sectionIndex;
 					}
 
-					fetch(`${API_ROOT}/api/v1/homepageconfig/set-config`, {
-						method: "POST",
-						body: JSON.stringify(requestObj)
-					}).then(response => {
-						alert("Refreshing page to reflect changes...");
-						window.location.reload();
-					});
+					apiCall(`${API_ROOT}/api/v1/homepageconfig/set-config`, 'POST', requestObj)
+						.then(data => {
+							alert("Refreshing page to reflect changes...");
+							window.location.reload();
+						});
 				}
 				else {
 					showToast("error", "Product not found!");
 				}
-			})
-		})
+			});
 	};
 
 	const getAddProductModalContent = () => {

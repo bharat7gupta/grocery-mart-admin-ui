@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import { API_ROOT } from '../../components/common/config';
+import apiCall from '../../ApiHelper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,19 +55,18 @@ const LoginView = () => {
                 requestObject.mobile = email;
               }
 
-              fetch(`${API_ROOT}/api/v1/account/login`, {
-                method: 'POST',
-                body: JSON.stringify(requestObject)
-              })
-                .then(response => response.json().then(data => {
+              apiCall(`${API_ROOT}/api/v1/account/login`, 'POST', requestObject)
+                .then(data => {
                   if (data.code === 'success') {
                     localStorage.setItem('username', data.data.username);
+                    localStorage.setItem('token', data.data.token);
                     navigate('/app/home/retail', { replace: true });
                   }
                   else {
+                    alert('Invalid login details');
                     actions.setSubmitting(false);
                   }
-                }));
+                });
             }}
           >
             {({
