@@ -108,5 +108,5 @@ export const marketPlaces = [
 	'restaurant'
 ];
 
-export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';
-// export const API_ROOT = 'http://localhost:1337';
+// export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';
+export const API_ROOT = 'http://localhost:1337';

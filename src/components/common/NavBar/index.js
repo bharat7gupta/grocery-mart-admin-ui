@@ -17,7 +17,8 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
+  Activity as ActivityIcon
 } from 'react-feather';
 import InputIcon from '@material-ui/icons/Input';
 import NavItem from './NavItem';
@@ -52,7 +53,12 @@ const items = [
     href: '/app/customers',
     icon: UsersIcon,
     title: 'Customers'
-  }
+  },
+  {
+    href: '/app/configure-routes',
+    icon: ActivityIcon,
+    title: 'Configure Routes'
+  },
 ];
 
 const useStyles = makeStyles(() => ({
