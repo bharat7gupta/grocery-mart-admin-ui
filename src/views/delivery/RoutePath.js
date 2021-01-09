@@ -1,6 +1,7 @@
 import React from 'react';
 import {
 	Button,
+	Checkbox,
 	TextField,
 	makeStyles,
 	Accordion,
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	heading: {
 	  fontSize: theme.typography.pxToRem(15),
-	  flexBasis: '33.33%',
+	  flexBasis: '70%',
 	  flexShrink: 0,
 	},
 	secondaryHeading: {
@@ -95,11 +96,20 @@ const RoutePath = (props) => {
 				<Typography className={classes.heading}>
 					{!editingRouteName && (
 						<>
+							{props.viewMode && (
+								<Checkbox
+									checked={props.selectedRoute === route.id}
+									color="primary"
+									onClick={() => props.onSelect(route.id)}
+								/>
+							)}
 							<b>{route.name}</b>
-							<EditIcon
-								style={{ fontSize: 20, marginBottom: '-4px', marginLeft: '4px' }}
-								onClick={(e) => handleRouteNameEditClick(e, route.id)}
-							/>
+							{!props.viewMode && (
+								<EditIcon
+									style={{ fontSize: 20, marginBottom: '-4px', marginLeft: '4px' }}
+									onClick={(e) => handleRouteNameEditClick(e, route.id)}
+								/>
+							)}
 						</>
 					)}
 
@@ -119,6 +129,7 @@ const RoutePath = (props) => {
 
 			<AccordionDetails style={{ display: 'block' }}>
 				<RoutePathEdit
+					viewMode={props.viewMode}
 					points={route.points || []}
 					onSave={onSave}
 					onCancel={onCancel}

@@ -15,7 +15,8 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  makeStyles
+  makeStyles,
+  Button
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
@@ -26,46 +27,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ className, customers, ...rest }) => {
+const Results = ({ className, customers, routes, onConfirmAccount, onBlockAccount, onRouteAssignInit, ...rest }) => {
   const classes = useStyles();
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
 
-  const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
+  const getRouteName = (customerRouteId) => {
+    const currRoute = routes && routes.find(r => r.id === customerRouteId);
 
-    if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
+    return currRoute && currRoute.name;
   };
 
   const handlePageChange = (event, newPage) => {
@@ -82,7 +52,7 @@ const Results = ({ className, customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedCustomerIds.length === customers.length}
                     color="primary"
@@ -92,68 +62,105 @@ const Results = ({ className, customers, ...rest }) => {
                     }
                     onChange={handleSelectAll}
                   />
-                </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                  Email
-                </TableCell>
-                <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
-                </TableCell>
+                </TableCell> */}
+                <TableCell>Name</TableCell>
+                <TableCell>Customer Type</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>License</TableCell>
+                <TableCell>Landmark</TableCell>
+                <TableCell>Account Status</TableCell>
+                <TableCell>Created At</TableCell>
+                <TableCell>Route</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {customers.map((customer) => (
                 <TableRow
                   hover
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedCustomerIds.indexOf(customer.id) !== -1}
                       onChange={(event) => handleSelectOne(event, customer.id)}
                       value="true"
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Box
                       alignItems="center"
                       display="flex"
                     >
-                      <Avatar
+                      {/* <Avatar
                         className={classes.avatar}
                         src={customer.avatarUrl}
                       >
                         {getInitials(customer.name)}
-                      </Avatar>
+                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {customer.username}
                       </Typography>
                     </Box>
                   </TableCell>
+
                   <TableCell>
-                    {customer.email}
+                    <Box
+                      alignItems="center"
+                      display="flex"
+                    >
+                      <Typography
+                        color="textPrimary"
+                        variant="body1"
+                        style={{ textTransform: 'uppercase' }}
+                      >
+                        {customer.userType}
+                      </Typography>
+                    </Box>
                   </TableCell>
+                  <TableCell>{customer.email}</TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {customer.mobile}{customer.mobile &&<br/>}{customer.altPhoneNumber}
                   </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
+                  <TableCell>{customer.licenseNumber}</TableCell>
+                  <TableCell>{customer.landmark}</TableCell>
+                  <TableCell>{customer.accountStatus}</TableCell>
                   <TableCell>
                     {moment(customer.createdAt).format('DD/MM/YYYY')}
+                  </TableCell>
+                  <TableCell>
+                    {getRouteName(customer.route)}
+                    <a href='javascript:void(0)' onClick={() => onRouteAssignInit(customer.id)}>
+                      {customer.route ? ' Change' : 'Assign'}
+                    </a>
+                  </TableCell>
+                  <TableCell>
+                    {(customer.accountStatus === 'UNCONFIRMED' || customer.accountStatus === 'BLOCKED') && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => onConfirmAccount(customer.id)}
+                        disabled={!customer.route}
+                      >
+                        Confirm
+                      </Button>
+                    )}
+                    {customer.accountStatus === 'CONFIRMED' && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        style={{ backgroundColor: '#e91e63' }}
+                        onClick={() => onBlockAccount(customer.id)}
+                      >
+                        Block
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -161,7 +168,7 @@ const Results = ({ className, customers, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      <TablePagination
+      {/* <TablePagination
         component="div"
         count={customers.length}
         onChangePage={handlePageChange}
@@ -169,7 +176,7 @@ const Results = ({ className, customers, ...rest }) => {
         page={page}
         rowsPerPage={limit}
         rowsPerPageOptions={[5, 10, 25]}
-      />
+      /> */}
     </Card>
   );
 };

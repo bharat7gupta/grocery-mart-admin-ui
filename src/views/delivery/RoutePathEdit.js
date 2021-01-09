@@ -91,7 +91,7 @@ const RoutePathEdit = (props) => {
 						<div key={point} className={classes.item} style={{ margin: (index === 0) && '0 12px' }}>
 							<Chip label={point} variant="outlined" className={classes.chip} />
 
-							{indexToAddAfter === undefined && (
+							{indexToAddAfter === undefined && !props.viewMode && (
 								<React.Fragment>
 									<AddCircleOutlineIcon className={classes.icon} onClick={() => handleAddPointClick(index)} />
 									<DeleteOutlineIcon className={classes.icon} onClick={() => handleDeletePointClick(index)} />
@@ -120,22 +120,26 @@ const RoutePathEdit = (props) => {
 				<div className={classes.routeLine}></div>
 			</div>
 
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={handleSaveClick}
-				style={{ margin: '30px 12px 12px', width: 120 }}
-			>
-				Save
-			</Button>
+			{!props.viewMode && (
+				<>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleSaveClick}
+						style={{ margin: '30px 12px 12px', width: 120 }}
+					>
+						Save
+					</Button>
 
-			<Button
-				variant="contained"
-				onClick={handleCancelClick}
-				style={{ margin: '30px 12px 12px' }}
-			>
-				Cancel
-			</Button>
+					<Button
+						variant="contained"
+						onClick={handleCancelClick}
+						style={{ margin: '30px 12px 12px' }}
+					>
+						Cancel
+					</Button>
+				</>
+			)}
 		</>
 	);
 };
