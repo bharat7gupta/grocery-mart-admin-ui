@@ -86,7 +86,7 @@ const Order = (props) => {
 				</a>
 			</TableCell>
 			<TableCell>
-				{(props.order.status === 'PENDING' || props.order.status === 'REJECTED') && (
+				{(props.order.status === 'SUCCESS' || props.order.status === 'REJECTED') && (
 					<Button
                         variant="contained"
                         color="primary"
@@ -96,8 +96,8 @@ const Order = (props) => {
                         Confirm
 					</Button>
 				)}
-				{props.order.status === 'PENDING' && <div style={{marginTop: 4}} />}
-				{(props.order.status === 'PENDING' || props.order.status === 'CONFIRMED') && (
+				{props.order.status === 'SUCCESS' && <div style={{marginTop: 4}} />}
+				{(props.order.status === 'SUCCESS' || props.order.status === 'CONFIRMED') && (
 					<Button
 						variant="contained"
 						color="secondary"
