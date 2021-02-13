@@ -21,6 +21,7 @@ import {
   Activity as ActivityIcon
 } from 'react-feather';
 import InputIcon from '@material-ui/icons/Input';
+import FormatListNumberedRtlIcon from '@material-ui/icons/FormatListNumberedRtl';
 import NavItem from './NavItem';
 
 const items = [
@@ -58,6 +59,11 @@ const items = [
     href: '/app/configure-routes',
     icon: ActivityIcon,
     title: 'Configure Routes'
+  },
+  {
+    href: '/app/orders',
+    icon: FormatListNumberedRtlIcon,
+    title: 'Orders'
   },
 ];
 

@@ -11,6 +11,7 @@ import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import ConfigureRoutes from 'src/views/delivery/ConfigureRoutes';
+import Orders from 'src/views/order/Orders';
 import Home from 'src/components/Home/Home';
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'configure-routes', element: <ConfigureRoutes /> },
+      { path: 'orders', element: <Orders /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
