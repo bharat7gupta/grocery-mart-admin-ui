@@ -115,11 +115,11 @@ export default function ProductAddEdit(props) {
 		const selectedMarketPlaces = product.marketPlaces || [];
 
 		if (selected) {
-			marketPlaces = [ ...selectedMarketPlaces, marketPlace ];
+			marketPlaces = [ ...selectedMarketPlaces, marketPlace.value ];
 			onProductDetailChanged({ marketPlaces });
 		}
 		else {
-			marketPlaces = selectedMarketPlaces.filter(m => m !== marketPlace);
+			marketPlaces = selectedMarketPlaces.filter(m => m !== marketPlace.value);
 			onProductDetailChanged({ marketPlaces });
 		}
 
@@ -128,7 +128,7 @@ export default function ProductAddEdit(props) {
 
 	const isMarketPlaceSelected = (marketPlace) => {
 		const selectedMarketPlaces = product.marketPlaces || [];
-		return selectedMarketPlaces.indexOf(marketPlace) > -1;
+		return selectedMarketPlaces.indexOf(marketPlace.value) > -1;
 	}
 
 	const shouldEnableWholesaleBuyingOption = () => {
@@ -360,14 +360,14 @@ export default function ProductAddEdit(props) {
 							key={marketPlace}
 							control={
 								<Checkbox
-									name={`${marketPlace}retailMarketPlace`}
+									name={`${marketPlace.value}MarketPlace`}
 									size="small"
 									color="primary"
 									checked={isMarketPlaceSelected(marketPlace)}
 									onChange={(event) => handleMarketPlaceChange(marketPlace, event.target.checked)}
 								/>
 							}
-							label={marketPlace}
+							label={marketPlace.text}
 							style={{textTransform: 'capitalize'}}
 						/>
 					))}

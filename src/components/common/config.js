@@ -102,10 +102,10 @@ export const homePageSlotKeys = [
 ];
 
 export const marketPlaces = [
-	'retail',
-	'wholesaler',
-	'dates',
-	'restaurant'
+	{ text: 'Retail', value: 'DEFAULT' },
+	{ text: 'Wholesaler', value: 'WHOLESALER' },
+	{ text: 'Dates', value: 'DATES' },
+	{ text: 'Restaurant', value: 'RESTAURANT' }
 ];
 
 export const API_ROOT = 'https://grocery-mart-api.herokuapp.com';
