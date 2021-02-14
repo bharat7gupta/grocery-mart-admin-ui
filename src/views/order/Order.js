@@ -50,7 +50,7 @@ const Order = (props) => {
 		}
 
 		const driver = props.drivers.find(d => d.id === driverId);
-		return driver.username;
+		return driver && driver.username;
 	};
 
 	const onConfirmOrder = () => {
@@ -61,6 +61,8 @@ const Order = (props) => {
 		props.onRejectOrder(props.order);
 	};
 
+	const userType = props.order.user.userType === 'DEFAULT' ? 'RETAILER' : props.order.user.userType;
+
 	return (
 		<TableRow
 			hover
@@ -68,6 +70,7 @@ const Order = (props) => {
 	  	>
 			<TableCell>{getOrderDate(props.order.createdAt)}</TableCell>
 			<TableCell>{props.order.user.username}</TableCell>
+			<TableCell>{userType}</TableCell>
 			<TableCell>{props.order.user.mobile || props.order.user.email}</TableCell>
 			{/* <TableCell>{props.order.id}</TableCell> */}
 			<TableCell>

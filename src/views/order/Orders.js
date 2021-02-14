@@ -103,6 +103,7 @@ const Orders = (props) => {
 							<TableRow>
 								<TableCell>Order Datetime</TableCell>
 								<TableCell>Customer</TableCell>
+								<TableCell>Type</TableCell>
 								<TableCell>Contact</TableCell>
 								{/* <TableCell>Order Id</TableCell> */}
 								<TableCell>Products</TableCell>
