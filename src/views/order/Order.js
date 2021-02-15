@@ -18,7 +18,7 @@ const Order = (props) => {
 	};
 
 	const getOrderDate = (timestamp) => {
-		var now     = new Date(); 
+		var now     = new Date(timestamp);
         var year    = now.getFullYear();
         var month   = now.getMonth()+1; 
         var day     = now.getDate();
