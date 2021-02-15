@@ -56,6 +56,11 @@ const items = [
     title: 'Customers'
   },
   {
+    href: '/app/drivers',
+    icon: UsersIcon,
+    title: 'Drivers'
+  },
+  {
     href: '/app/configure-routes',
     icon: ActivityIcon,
     title: 'Configure Routes'
