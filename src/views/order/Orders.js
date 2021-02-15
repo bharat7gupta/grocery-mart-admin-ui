@@ -107,7 +107,7 @@ const Orders = (props) => {
 								<TableCell>Contact</TableCell>
 								{/* <TableCell>Order Id</TableCell> */}
 								<TableCell>Products</TableCell>
-								<TableCell>Route</TableCell>
+								<TableCell>Route / Address</TableCell>
 								<TableCell>Order Value</TableCell>
 								<TableCell>Order Status</TableCell>
 								<TableCell>Driver</TableCell>
@@ -116,7 +116,7 @@ const Orders = (props) => {
 						</TableHead>
 
 						<TableBody>
-							{orders.map(order => (
+							{orders && orders.map(order => (
 								<Order
 									order={order}
 									routes={routes}

@@ -53,6 +53,14 @@ const Order = (props) => {
 		return driver && driver.username;
 	};
 
+	const getAddressString = (address) => {
+		if (!address) {
+			return '';
+		}
+
+		return `${address.houseNo}, ${address.roadName}, ${address.city}`
+	};
+
 	const onConfirmOrder = () => {
 		props.onConfirmOrder(props.order);
 	};
@@ -71,7 +79,11 @@ const Order = (props) => {
 			<TableCell>{getOrderDate(props.order.createdAt)}</TableCell>
 			<TableCell>{props.order.user.username}</TableCell>
 			<TableCell>{userType}</TableCell>
-			<TableCell>{props.order.user.mobile || props.order.user.email}</TableCell>
+			<TableCell>
+				{props.order.user.mobile || props.order.user.email}
+				<br/>
+				{props.order && props.order.address && props.order.address.phoneNumber}
+			</TableCell>
 			{/* <TableCell>{props.order.id}</TableCell> */}
 			<TableCell>
 				{getProductNames()}&nbsp;
@@ -79,7 +91,9 @@ const Order = (props) => {
 					Details
 				</a>
 			</TableCell>
-			<TableCell>{getRouteName(props.order.user.route)}</TableCell>
+			<TableCell>
+				{getRouteName(props.order.user.route) || getAddressString(props.order.address)}
+			</TableCell>
 			<TableCell>{props.order.priceSummary.payableAmount}</TableCell>
 			<TableCell>{props.order.status}</TableCell>
 			<TableCell>
